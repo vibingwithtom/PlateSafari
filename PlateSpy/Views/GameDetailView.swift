@@ -42,7 +42,7 @@ struct GameDetailView: View {
         .navigationTitle(gameManager.displayName(for: game))
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $showingPlateSelector) {
-            PlateSelectionSheet(game: game)
+            PlateSelectionWorkflow(game: game)
         }
     }
 }
@@ -211,22 +211,17 @@ struct RecentPlateCard: View {
     
     var body: some View {
         VStack(spacing: 8) {
-            // Placeholder for plate image
-            RoundedRectangle(cornerRadius: 6)
-                .fill(Color(.systemGray5))
-                .aspectRatio(2, contentMode: .fit)
-                .frame(width: 80)
-                .overlay(
-                    VStack {
-                        Text(plate.state)
-                            .font(.caption2)
-                            .fontWeight(.bold)
-                        
-                        Image(systemName: "car.rear")
-                            .font(.caption)
-                    }
-                    .foregroundColor(.gray)
-                )
+            // Create temporary PlateMetadata for image loading
+            AsyncPlateImageView(
+                plate: PlateMetadata(
+                    state: plate.state,
+                    plateTitle: plate.plateTitle,
+                    plateImage: plate.plateImage
+                ),
+                cornerRadius: 6
+            )
+            .aspectRatio(2, contentMode: .fit)
+            .frame(width: 80)
             
             Text(plate.plateTitle)
                 .font(.caption2)
@@ -284,36 +279,6 @@ struct GameActionsSection: View {
     }
 }
 
-/**
- * Placeholder for plate selection sheet
- */
-struct PlateSelectionSheet: View {
-    let game: Game
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("Plate Selection")
-                    .font(.title)
-                
-                Text("This will be the plate logging interface")
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-            }
-            .navigationTitle("Log Plate")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
 
 #Preview {
     NavigationView {

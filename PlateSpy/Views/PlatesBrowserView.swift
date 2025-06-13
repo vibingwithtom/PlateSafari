@@ -304,15 +304,8 @@ struct PlateCardView: View {
     
     var body: some View {
         VStack(spacing: 8) {
-            // Placeholder for plate image
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.systemGray5))
-                .aspectRatio(2, contentMode: .fit)
-                .overlay(
-                    Image(systemName: "car.rear")
-                        .font(.title)
-                        .foregroundColor(.gray)
-                )
+            // Async plate image
+            AsyncPlateImageView.card(plate: plate)
             
             Text(plate.plateTitle)
                 .font(.caption)
