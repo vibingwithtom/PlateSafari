@@ -9,12 +9,19 @@ import SwiftUI
 
 @main
 struct PlateSpyApp: App {
-    let persistenceController = PersistenceController.shared
-
+    // Core services for the entire app
+    @StateObject private var plateDataService = PlateDataService()
+    @StateObject private var gameManager = GameManagerService()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            MainTabView()
+                .environmentObject(plateDataService)
+                .environmentObject(gameManager)
+                .onAppear {
+                    // Load plate data when app launches
+                    plateDataService.loadPlateData()
+                }
         }
     }
 }
