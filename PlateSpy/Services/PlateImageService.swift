@@ -127,13 +127,10 @@ class PlateImageService: ObservableObject {
             return cachedImage
         }
         
-        // For now, skip external file loading since images aren't in app bundle
-        // TODO: Images need to be properly bundled or loaded from server
-        print("📷 Image loading from external paths not available on device/simulator")
-        
-        // Fallback: try bundle path
+        // Try bundle path with folder reference structure
         guard let bundlePath = Bundle.main.resourcePath else { return nil }
         let imagePath = "\(bundlePath)/SourcePlateImages/\(state)/\(imageName)"
+        print("🔍 Trying bundle path: \(imagePath)")
         
         // Try to load from the specific state folder first
         if FileManager.default.fileExists(atPath: imagePath),
