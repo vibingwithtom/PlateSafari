@@ -125,7 +125,7 @@ struct GamePreferencesView: View {
             HStack {
                 Text("Default Game Mode")
                 Spacer()
-                Picker("Default Game Mode", selection: .constant(gameManager.userPreferences.defaultGameMode)) {
+                Picker("", selection: .constant(gameManager.userPreferences.defaultGameMode)) {
                     ForEach(GameMode.allCases, id: \.self) { mode in
                         Text(mode.displayName).tag(mode)
                     }
