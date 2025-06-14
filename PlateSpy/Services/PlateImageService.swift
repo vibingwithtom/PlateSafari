@@ -153,14 +153,7 @@ class PlateImageService: ObservableObject {
      * Load common images (like MISSING.png) from any available state folder
      */
     private func loadCommonImageFromAnyState(imageName: String, bundlePath: String, cacheKey: NSString) -> UIImage? {
-        // Try project directory first
-        let projectSourcePath = "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages"
-        if FileManager.default.fileExists(atPath: projectSourcePath),
-           let image = searchForImageInPath(imageName: imageName, basePath: projectSourcePath, cacheKey: cacheKey) {
-            return image
-        }
-        
-        // Fallback to bundle path
+        // Use bundled path only (since images are now properly bundled)
         let sourceImagesPath = "\(bundlePath)/SourcePlateImages"
         return searchForImageInPath(imageName: imageName, basePath: sourceImagesPath, cacheKey: cacheKey)
     }
