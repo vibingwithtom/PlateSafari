@@ -75,7 +75,10 @@ struct BrowserContentView: View {
                     state: state
                 )
             } else {
-                PlaceholderView()
+                AllStatesPlatesGridView(
+                    plates: allStatesFilteredPlates,
+                    searchText: searchText
+                )
             }
         }
     }
@@ -111,6 +114,38 @@ struct BrowserContentView: View {
         }
         
         return plates.sorted { $0.plateTitle < $1.plateTitle }
+    }
+    
+    /**
+     * Get filtered plates from all states when no specific state is selected
+     */
+    private var allStatesFilteredPlates: [PlateMetadata] {
+        var plates = plateDataService.plates
+        
+        // Apply search filter
+        if !searchText.isEmpty {
+            plates = plates.filter { plate in
+                plate.plateTitle.localizedCaseInsensitiveContains(searchText) ||
+                plate.state.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+        
+        // Apply category filter
+        if let category = selectedCategory {
+            plates = plates.filter { $0.category == category }
+        }
+        
+        // Apply rarity filter
+        if let rarity = selectedRarity {
+            plates = plates.filter { $0.rarity == rarity }
+        }
+        
+        return plates.sorted { 
+            if $0.state != $1.state {
+                return $0.state < $1.state
+            }
+            return $0.plateTitle < $1.plateTitle
+        }
     }
 }
 
@@ -198,12 +233,21 @@ struct CompactStatePicker: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("All States")
+                Text(selectedState == nil ? "All States" : "Selected State")
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(.secondary)
                 
                 Spacer()
+                
+                // Clear state selection button when state is selected
+                if selectedState != nil {
+                    Button("View All States") {
+                        selectedState = nil
+                    }
+                    .font(.caption)
+                    .foregroundColor(.blue)
+                }
             }
             .padding(.horizontal)
             
@@ -220,9 +264,17 @@ struct CompactStatePicker: View {
                     
                     Spacer()
                     
-                    Image(systemName: "chevron.down")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    if selectedState != nil {
+                        Button(action: { selectedState = nil }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    } else {
+                        Image(systemName: "chevron.down")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
                 .padding()
                 .background(Color(.systemGray6))
@@ -446,6 +498,84 @@ struct PlatesGridView: View {
                 .padding()
             }
         }
+    }
+}
+
+/**
+ * Grid view of plates from all states with state grouping
+ */
+struct AllStatesPlatesGridView: View {
+    let plates: [PlateMetadata]
+    let searchText: String
+    
+    var body: some View {
+        if plates.isEmpty {
+            if searchText.isEmpty {
+                AllStatesEmptyView()
+            } else {
+                EmptyPlatesView()
+            }
+        } else {
+            ScrollView {
+                LazyVStack(spacing: 20) {
+                    // Group plates by state and display each group
+                    ForEach(groupedPlates.keys.sorted(), id: \.self) { state in
+                        VStack(alignment: .leading, spacing: 12) {
+                            // State header
+                            HStack {
+                                Text(state)
+                                    .font(.headline)
+                                    .fontWeight(.semibold)
+                                
+                                Spacer()
+                                
+                                Text("\(groupedPlates[state]?.count ?? 0) plate\(groupedPlates[state]?.count == 1 ? "" : "s")")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.horizontal)
+                            
+                            // Plates grid for this state
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                                ForEach(groupedPlates[state] ?? []) { plate in
+                                    PlateCardView(plate: plate)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+        }
+    }
+    
+    private var groupedPlates: [String: [PlateMetadata]] {
+        Dictionary(grouping: plates) { $0.state }
+    }
+}
+
+/**
+ * Empty state for all-states view when no search is active
+ */
+struct AllStatesEmptyView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 50))
+                .foregroundColor(.gray)
+            
+            Text("Search across all states")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            Text("Type in the search bar above to find plates from any state")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
