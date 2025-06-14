@@ -74,7 +74,7 @@ struct Game: Codable, Identifiable {
         // For State Collection mode, only allow one plate per state
         if mode == .stateCollection {
             // Remove any existing plate from this state
-            collectedPlates.removeAll { $0.state == metadata.state }
+            collectedPlates = Set(collectedPlates.filter { $0.state != metadata.state })
         }
         
         let (inserted, _) = collectedPlates.insert(collectedPlate)
@@ -90,9 +90,9 @@ struct Game: Codable, Identifiable {
      */
     mutating func removePlate(state: String, plateTitle: String) -> Bool {
         let beforeCount = collectedPlates.count
-        collectedPlates.removeAll { plate in
-            plate.state == state && plate.plateTitle == plateTitle
-        }
+        collectedPlates = Set(collectedPlates.filter { plate in
+            !(plate.state == state && plate.plateTitle == plateTitle)
+        })
         let removed = collectedPlates.count < beforeCount
         if removed {
             lastPlayedDate = Date()

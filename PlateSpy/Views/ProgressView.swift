@@ -11,7 +11,7 @@ import SwiftUI
  * Progress visualization and statistics view
  * Shows collection progress across all games with maps and charts
  */
-struct ProgressView: View {
+struct ProgressTrackingView: View {
     @EnvironmentObject var gameManager: GameManagerService
     
     var body: some View {
@@ -321,6 +321,6 @@ struct MapPlaceholder: View {
 }
 
 #Preview {
-    ProgressView()
+    ProgressTrackingView()
         .environmentObject(GameManagerService())
 }

@@ -32,7 +32,7 @@ struct MainTabView: View {
                 }
             
             // Progress tab - View collection progress and maps
-            ProgressView()
+            ProgressTrackingView()
                 .tabItem {
                     Image(systemName: "chart.bar")
                     Text("Progress")
