@@ -127,9 +127,18 @@ class PlateImageService: ObservableObject {
             return cachedImage
         }
         
-        // Construct direct path to image in bundle
+        // Try project directory first (development)
+        let projectPath = "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages/\(state)/\(imageName)"
+        if FileManager.default.fileExists(atPath: projectPath),
+           let image = UIImage(contentsOfFile: projectPath) {
+            let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
+            bundleImageCache.setObject(resizedImage, forKey: cacheKey)
+            return resizedImage
+        }
+        
+        // Fallback: try bundle path
         guard let bundlePath = Bundle.main.resourcePath else { return nil }
-        let imagePath = "\(bundlePath)/Resources/SourcePlateImages/\(state)/\(imageName)"
+        let imagePath = "\(bundlePath)/SourcePlateImages/\(state)/\(imageName)"
         
         // Try to load from the specific state folder first
         if FileManager.default.fileExists(atPath: imagePath),
@@ -152,13 +161,26 @@ class PlateImageService: ObservableObject {
      * Load common images (like MISSING.png) from any available state folder
      */
     private func loadCommonImageFromAnyState(imageName: String, bundlePath: String, cacheKey: NSString) -> UIImage? {
-        let sourceImagesPath = "\(bundlePath)/Resources/SourcePlateImages"
+        // Try project directory first
+        let projectSourcePath = "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages"
+        if let image = searchForImageInPath(imageName: imageName, basePath: projectSourcePath, cacheKey: cacheKey) {
+            return image
+        }
         
+        // Fallback to bundle path
+        let sourceImagesPath = "\(bundlePath)/SourcePlateImages"
+        return searchForImageInPath(imageName: imageName, basePath: sourceImagesPath, cacheKey: cacheKey)
+    }
+    
+    /**
+     * Helper method to search for an image in any state subdirectory
+     */
+    private func searchForImageInPath(imageName: String, basePath: String, cacheKey: NSString) -> UIImage? {
         do {
-            let stateDirectories = try FileManager.default.contentsOfDirectory(atPath: sourceImagesPath)
+            let stateDirectories = try FileManager.default.contentsOfDirectory(atPath: basePath)
             
             for stateDir in stateDirectories {
-                let imagePath = "\(sourceImagesPath)/\(stateDir)/\(imageName)"
+                let imagePath = "\(basePath)/\(stateDir)/\(imageName)"
                 
                 if FileManager.default.fileExists(atPath: imagePath),
                    let image = UIImage(contentsOfFile: imagePath) {
@@ -174,7 +196,7 @@ class PlateImageService: ObservableObject {
                 }
             }
         } catch {
-            print("⚠️ Error searching for common image \(imageName): \(error)")
+            print("⚠️ Error searching for common image \(imageName) in \(basePath): \(error)")
         }
         
         return nil
