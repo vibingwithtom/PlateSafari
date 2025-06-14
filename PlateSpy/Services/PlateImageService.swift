@@ -151,7 +151,9 @@ class PlateImageService: ObservableObject {
             
             // Border
             UIColor.systemGray4.setStroke()
-            context.stroke(CGRect(origin: .zero, size: size), width: 2)
+            let borderRect = CGRect(origin: .zero, size: size).insetBy(dx: 1, dy: 1)
+            context.cgContext.setLineWidth(2)
+            context.cgContext.stroke(borderRect)
             
             // State text
             let stateText = plate.state
