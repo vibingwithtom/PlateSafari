@@ -127,34 +127,9 @@ class PlateImageService: ObservableObject {
             return cachedImage
         }
         
-        // Try to find project directory - check if we're in development/simulator
-        let possibleProjectPaths = [
-            "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages/\(state)/\(imageName)"
-        ]
-        
-        for projectPath in possibleProjectPaths {
-            print("🔍 Trying image path: \(projectPath)")
-            if FileManager.default.fileExists(atPath: projectPath),
-               let image = UIImage(contentsOfFile: projectPath) {
-                print("✅ Found image at: \(projectPath)")
-                let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
-                bundleImageCache.setObject(resizedImage, forKey: cacheKey)
-                return resizedImage
-            }
-            
-            // Also try URL-decoded version if the filename might be encoded
-            if let decodedImageName = imageName.removingPercentEncoding {
-                let decodedPath = "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages/\(state)/\(decodedImageName)"
-                print("🔍 Trying decoded path: \(decodedPath)")
-                if FileManager.default.fileExists(atPath: decodedPath),
-                   let image = UIImage(contentsOfFile: decodedPath) {
-                    print("✅ Found decoded image at: \(decodedPath)")
-                    let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
-                    bundleImageCache.setObject(resizedImage, forKey: cacheKey)
-                    return resizedImage
-                }
-            }
-        }
+        // For now, skip external file loading since images aren't in app bundle
+        // TODO: Images need to be properly bundled or loaded from server
+        print("📷 Image loading from external paths not available on device/simulator")
         
         // Fallback: try bundle path
         guard let bundlePath = Bundle.main.resourcePath else { return nil }
