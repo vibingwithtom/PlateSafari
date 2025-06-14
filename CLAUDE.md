@@ -106,6 +106,7 @@ PlateSpy is a SwiftUI iOS app for collecting license plate images in a gamified 
 - Create pull requests for all feature work
 - Update relevant GitHub issues with progress and resolution status
 - Push branches regularly to maintain backup and collaboration
+- **Issue Management**: Update issue status with progress comments, but let user review and close issues
 
 **Code Documentation**:
 - Add concise inline documentation for complex logic

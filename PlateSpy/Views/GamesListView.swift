@@ -135,11 +135,19 @@ struct GameRowView: View {
                     .scaleEffect(x: 1, y: 0.7) // Make progress bar thinner
             }
             
-            // Last played date
+            // Date information
             HStack {
-                Text("Last played: \(game.lastPlayedDate, formatter: relativeDateFormatter)")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                if game.plateCount > 0 && abs(game.lastPlayedDate.timeIntervalSince(game.createdDate)) > 60 {
+                    // Show "Last played" only if plates have been collected and it's meaningfully different from creation
+                    Text("Last played: \(game.lastPlayedDate, formatter: relativeDateFormatter)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                } else {
+                    // Show creation date for new/unused games
+                    Text("Created: \(game.createdDate, formatter: relativeDateFormatter)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 
                 Spacer()
                 
