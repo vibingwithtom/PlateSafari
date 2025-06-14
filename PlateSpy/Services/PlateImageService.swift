@@ -127,24 +127,28 @@ class PlateImageService: ObservableObject {
             return cachedImage
         }
         
-        // Try to find project directory relative to bundle
-        if let bundlePath = Bundle.main.resourcePath {
-            // Navigate up from bundle to find project directory
-            let bundleURL = URL(fileURLWithPath: bundlePath)
-            let projectPaths = [
-                // Different possible locations relative to bundle
-                bundleURL.appendingPathComponent("../../../SourcePlateImages/\(state)/\(imageName)").path,
-                bundleURL.appendingPathComponent("../../../../SourcePlateImages/\(state)/\(imageName)").path,
-                bundleURL.appendingPathComponent("../../../../../SourcePlateImages/\(state)/\(imageName)").path,
-                "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages/\(state)/\(imageName)" // Direct path for development
-            ]
+        // Try to find project directory - check if we're in development/simulator
+        let possibleProjectPaths = [
+            "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages/\(state)/\(imageName)"
+        ]
+        
+        for projectPath in possibleProjectPaths {
+            print("🔍 Trying image path: \(projectPath)")
+            if FileManager.default.fileExists(atPath: projectPath),
+               let image = UIImage(contentsOfFile: projectPath) {
+                print("✅ Found image at: \(projectPath)")
+                let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
+                bundleImageCache.setObject(resizedImage, forKey: cacheKey)
+                return resizedImage
+            }
             
-            for projectPath in projectPaths {
-                let normalizedPath = URL(fileURLWithPath: projectPath).standardized.path
-                print("🔍 Trying image path: \(normalizedPath)")
-                if FileManager.default.fileExists(atPath: normalizedPath),
-                   let image = UIImage(contentsOfFile: normalizedPath) {
-                    print("✅ Found image at: \(normalizedPath)")
+            // Also try URL-decoded version if the filename might be encoded
+            if let decodedImageName = imageName.removingPercentEncoding {
+                let decodedPath = "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages/\(state)/\(decodedImageName)"
+                print("🔍 Trying decoded path: \(decodedPath)")
+                if FileManager.default.fileExists(atPath: decodedPath),
+                   let image = UIImage(contentsOfFile: decodedPath) {
+                    print("✅ Found decoded image at: \(decodedPath)")
                     let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
                     bundleImageCache.setObject(resizedImage, forKey: cacheKey)
                     return resizedImage
@@ -177,20 +181,11 @@ class PlateImageService: ObservableObject {
      * Load common images (like MISSING.png) from any available state folder
      */
     private func loadCommonImageFromAnyState(imageName: String, bundlePath: String, cacheKey: NSString) -> UIImage? {
-        // Try project directory with multiple possible locations
-        let bundleURL = URL(fileURLWithPath: bundlePath)
-        let possibleProjectPaths = [
-            bundleURL.appendingPathComponent("../../../SourcePlateImages").standardized.path,
-            bundleURL.appendingPathComponent("../../../../SourcePlateImages").standardized.path,
-            bundleURL.appendingPathComponent("../../../../../SourcePlateImages").standardized.path,
-            "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages" // Direct path for development
-        ]
-        
-        for projectPath in possibleProjectPaths {
-            if FileManager.default.fileExists(atPath: projectPath),
-               let image = searchForImageInPath(imageName: imageName, basePath: projectPath, cacheKey: cacheKey) {
-                return image
-            }
+        // Try project directory first
+        let projectSourcePath = "/Users/raia/XCodeProjects/PlateSpy/SourcePlateImages"
+        if FileManager.default.fileExists(atPath: projectSourcePath),
+           let image = searchForImageInPath(imageName: imageName, basePath: projectSourcePath, cacheKey: cacheKey) {
+            return image
         }
         
         // Fallback to bundle path
