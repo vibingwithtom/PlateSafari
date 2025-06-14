@@ -490,7 +490,7 @@ struct PlatesGridView: View {
             EmptyPlatesView()
         } else {
             ScrollView {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
                     ForEach(plates) { plate in
                         PlateCardView(plate: plate)
                     }
@@ -536,7 +536,7 @@ struct AllStatesPlatesGridView: View {
                             .padding(.horizontal)
                             
                             // Plates grid for this state
-                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                            LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
                                 ForEach(groupedPlates[state] ?? []) { plate in
                                     PlateCardView(plate: plate)
                                 }

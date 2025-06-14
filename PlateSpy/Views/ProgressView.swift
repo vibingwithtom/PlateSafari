@@ -75,7 +75,7 @@ struct OverallStatsCard: View {
             Text("Overall Statistics")
                 .font(.headline)
             
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+            LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
                 OverallStatItem(
                     title: "Total Games",
                     value: "\(gameManager.games.count)",

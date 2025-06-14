@@ -57,7 +57,9 @@ struct StateSection: View {
     let states: [String]
     @Binding var selectedState: String?
     
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
+    private var columns: [GridItem] {
+        ResponsiveLayout.adaptiveGridColumns(portraitColumns: 4, landscapeColumns: 6, spacing: 8)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -188,7 +190,9 @@ struct PlateSelectionGrid: View {
     @Binding var selectedPlate: PlateMetadata?
     @EnvironmentObject var gameManager: GameManagerService
     
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 2)
+    private var columns: [GridItem] {
+        ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 3, spacing: 12)
+    }
     
     var body: some View {
         ScrollView {

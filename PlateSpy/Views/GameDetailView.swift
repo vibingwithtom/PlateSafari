@@ -93,7 +93,7 @@ struct GameStatsCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             if let stats = gameManager.gameStatistics(for: game.id) {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
                     StatItem(title: "Plates Collected", value: "\(stats.totalPlates)")
                     StatItem(title: "States", value: "\(stats.uniqueStates)")
                     StatItem(title: "Total Score", value: "\(stats.totalScore)")
