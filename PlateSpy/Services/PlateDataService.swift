@@ -138,7 +138,18 @@ class PlateDataService: ObservableObject {
             
             do {
                 let values = parseCSVLine(line)
-                guard values.count >= 3 else { continue } // Need at least basic fields
+                guard values.count >= 3 else { 
+                    // Skip lines with insufficient data (like empty URL-only lines)
+                    continue 
+                }
+                
+                // Check if required fields have actual content (not just empty strings)
+                guard !values[0].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                      !values[1].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                      !values[2].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    // Skip lines where required fields are empty
+                    continue
+                }
                 
                 let plate = try createEnhancedPlate(from: values, headers: headers, lineNumber: lineNumber)
                 plates.append(plate)
