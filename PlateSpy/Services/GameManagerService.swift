@@ -168,7 +168,7 @@ class GameManagerService: ObservableObject {
     private func calculateCompletionPercentage(for game: Game) -> Double {
         switch game.mode {
         case .stateCollection:
-            return Double(game.stateCount) / 50.0 * 100.0
+            return Double(game.stateCount) / 51.0 * 100.0
         case .plateCollection:
             // For plate collection, use a relative scale based on typical completion
             let typical = 200 // Typical goal for serious collectors

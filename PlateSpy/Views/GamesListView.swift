@@ -117,7 +117,7 @@ struct GameRowView: View {
                         .foregroundColor(.primary)
                     
                     if game.mode == .stateCollection {
-                        Text("\(game.stateCount)/50 states")
+                        Text("\(game.stateCount)/51 states")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     } else {
@@ -130,7 +130,7 @@ struct GameRowView: View {
             
             // Progress bar for state collection mode
             if game.mode == .stateCollection {
-                ProgressView(value: Double(game.stateCount), total: 50.0)
+                ProgressView(value: Double(game.stateCount), total: 51.0)
                     .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                     .scaleEffect(x: 1, y: 0.7) // Make progress bar thinner
             }

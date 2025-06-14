@@ -244,7 +244,7 @@ struct AboutView: View {
                         Text("About PlateSpy")
                             .font(.headline)
                         
-                        Text("PlateSpy is the ultimate license plate spotting game! Collect plates from all 50 states with two exciting game modes:")
+                        Text("PlateSpy is the ultimate license plate spotting game! Collect plates from all 50 states and DC with two exciting game modes:")
                             .font(.body)
                         
                         VStack(alignment: .leading, spacing: 8) {

@@ -110,12 +110,12 @@ struct GameStatsCard: View {
                             
                             Spacer()
                             
-                            Text("\(game.stateCount)/50")
+                            Text("\(game.stateCount)/51")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
                         
-                        ProgressView(value: Double(game.stateCount), total: 50.0)
+                        ProgressView(value: Double(game.stateCount), total: 51.0)
                             .progressViewStyle(LinearProgressViewStyle(tint: .blue))
                     }
                 }
@@ -154,21 +154,37 @@ struct StatItem: View {
 }
 
 /**
- * Recent plates section
+ * Recent plates section with undo functionality
  */
 struct RecentPlatesSection: View {
     let game: Game
+    @EnvironmentObject var gameManager: GameManagerService
+    @State private var plateToRemove: CollectedPlate?
+    @State private var showingRemoveConfirmation = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Recent Plates")
-                .font(.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text("Recent Plates")
+                    .font(.headline)
+                
+                Spacer()
+                
+                Text("Tap to remove")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(Array(game.collectedPlates.sorted { $0.collectedDate > $1.collectedDate }.prefix(5)), id: \.id) { plate in
-                        RecentPlateCard(plate: plate)
+                        RecentPlateCard(
+                            plate: plate,
+                            onRemove: {
+                                plateToRemove = plate
+                                showingRemoveConfirmation = true
+                            }
+                        )
                     }
                 }
                 .padding(.horizontal, 1) // Prevents clipping shadows
@@ -177,36 +193,72 @@ struct RecentPlatesSection: View {
         .padding()
         .background(Color(.systemGroupedBackground))
         .cornerRadius(12)
+        .alert("Remove Plate", isPresented: $showingRemoveConfirmation) {
+            Button("Remove", role: .destructive) {
+                if let plate = plateToRemove {
+                    _ = gameManager.removePlate(
+                        gameId: game.id,
+                        state: plate.state,
+                        plateTitle: plate.plateTitle
+                    )
+                }
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            if let plate = plateToRemove {
+                Text("Remove \"\(plate.plateTitle)\" from \(plate.state)? This action cannot be undone.")
+            }
+        }
     }
 }
 
 /**
- * Individual recent plate card
+ * Individual recent plate card with remove functionality
  */
 struct RecentPlateCard: View {
     let plate: CollectedPlate
+    let onRemove: () -> Void
     
     var body: some View {
-        VStack(spacing: 8) {
-            // Create temporary PlateMetadata for image loading
-            AsyncPlateImageView(
-                plate: PlateMetadata(
-                    state: plate.state,
-                    plateTitle: plate.plateTitle,
-                    plateImage: plate.plateImage
-                ),
-                cornerRadius: 6
-            )
-            .aspectRatio(2, contentMode: .fit)
-            .frame(width: 80)
-            
-            Text(plate.plateTitle)
-                .font(.caption2)
-                .fontWeight(.medium)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
+        Button(action: onRemove) {
+            VStack(spacing: 8) {
+                // Create temporary PlateMetadata for image loading
+                AsyncPlateImageView(
+                    plate: PlateMetadata(
+                        state: plate.state,
+                        plateTitle: plate.plateTitle,
+                        plateImage: plate.plateImage
+                    ),
+                    cornerRadius: 6
+                )
+                .aspectRatio(2, contentMode: .fit)
                 .frame(width: 80)
+                .overlay(
+                    // Remove indicator
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                                .background(Color.white)
+                                .clipShape(Circle())
+                        }
+                        Spacer()
+                    }
+                    .padding(4)
+                )
+                
+                Text(plate.plateTitle)
+                    .font(.caption2)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .frame(width: 80)
+            }
         }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

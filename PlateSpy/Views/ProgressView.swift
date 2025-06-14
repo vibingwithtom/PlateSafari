@@ -190,8 +190,8 @@ struct GameProgressCard: View {
                 PlateCollectionProgress(game: game)
             }
             
-            // Map placeholder
-            MapPlaceholder(game: game)
+            // Interactive map
+            USMapView(game: game, compactMode: true)
         }
         .padding()
         .background(Color(.systemGroupedBackground))
@@ -214,22 +214,22 @@ struct StateCollectionProgress: View {
                 
                 Spacer()
                 
-                Text("\(game.stateCount)/50")
+                Text("\(game.stateCount)/51")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
             
-            ProgressView(value: Double(game.stateCount), total: 50.0)
+            ProgressView(value: Double(game.stateCount), total: 51.0)
                 .progressViewStyle(LinearProgressViewStyle(tint: .blue))
             
             HStack {
-                Text("\(String(format: "%.1f", Double(game.stateCount) / 50.0 * 100))% Complete")
+                Text("\(String(format: "%.1f", Double(game.stateCount) / 51.0 * 100))% Complete")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
                 Spacer()
                 
-                Text("\(50 - game.stateCount) remaining")
+                Text("\(51 - game.stateCount) remaining")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -280,45 +280,6 @@ struct PlateCollectionProgress: View {
     }
 }
 
-/**
- * Placeholder for map visualization
- */
-struct MapPlaceholder: View {
-    let game: Game
-    
-    var body: some View {
-        VStack(spacing: 8) {
-            HStack {
-                Text("Collection Map")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                
-                Spacer()
-                
-                Button("View Full Map") {
-                    // TODO: Navigate to full map view
-                }
-                .font(.caption)
-                .foregroundColor(.blue)
-            }
-            
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.systemGray6))
-                .frame(height: 120)
-                .overlay(
-                    VStack {
-                        Image(systemName: "map")
-                            .font(.title)
-                            .foregroundColor(.gray)
-                        
-                        Text("Interactive Map")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                )
-        }
-    }
-}
 
 #Preview {
     ProgressTrackingView()

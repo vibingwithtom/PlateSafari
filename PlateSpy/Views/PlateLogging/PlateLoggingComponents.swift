@@ -408,7 +408,7 @@ struct GameContextCard: View {
                 DetailRow(label: "Current Progress", value: "\(game.plateCount) plates")
                 
                 if game.mode == .stateCollection {
-                    DetailRow(label: "States Collected", value: "\(game.stateCount)/50")
+                    DetailRow(label: "States Collected", value: "\(game.stateCount)/51")
                 }
             }
         }

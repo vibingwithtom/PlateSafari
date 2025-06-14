@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Building and Testing
 ```bash
-# Build for iOS simulator
+# Build for iOS simulator (use available simulator)
 xcodebuild -scheme PlateSpy -destination 'platform=iOS Simulator,name=iPhone 16' build
 
 # Clean build (when having asset bundle issues)
@@ -14,6 +14,9 @@ xcodebuild -scheme PlateSpy -destination 'platform=iOS Simulator,name=iPhone 16'
 
 # Run in iOS simulator (open Xcode and run manually)
 open PlateSpy.xcodeproj
+
+# Note: Available simulators can be found with:
+# xcodebuild -scheme PlateSpy -showdestinations
 ```
 
 ## Architecture Overview

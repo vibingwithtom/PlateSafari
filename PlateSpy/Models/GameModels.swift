@@ -9,7 +9,7 @@ import Foundation
 
 /**
  * Core game model supporting two collection modes
- * State Collection: Traditional "one plate per state" (50 total)
+ * State Collection: Traditional "one plate per state" (51 total)
  * Plate Collection: Collect as many unique plates as possible
  */
 struct Game: Codable, Identifiable {
@@ -148,7 +148,7 @@ enum GameMode: String, CaseIterable, Codable {
     
     var description: String {
         switch self {
-        case .stateCollection: return "Collect one plate from each state (50 total)"
+        case .stateCollection: return "Collect one plate from each state (51 total)"
         case .plateCollection: return "Collect as many unique plates as possible"
         }
     }
@@ -159,7 +159,7 @@ enum GameMode: String, CaseIterable, Codable {
      */
     var maxCompletion: Int {
         switch self {
-        case .stateCollection: return 50 // One per state
+        case .stateCollection: return 51 // One per state + DC
         case .plateCollection: return Int.max // Unlimited
         }
     }
