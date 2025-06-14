@@ -14,17 +14,19 @@ import SwiftUI
 struct USMapView: View {
     let game: Game
     let compactMode: Bool
+    let showHeader: Bool
     @State private var selectedState: String?
     @State private var showingFullMap = false
     
-    init(game: Game, compactMode: Bool = true) {
+    init(game: Game, compactMode: Bool = true, showHeader: Bool = true) {
         self.game = game
         self.compactMode = compactMode
+        self.showHeader = showHeader
     }
     
     var body: some View {
         VStack(spacing: compactMode ? 8 : 16) {
-            if compactMode {
+            if compactMode && showHeader {
                 // Compact header with "View Full Map" button
                 HStack {
                     Text("Collection Map")
@@ -39,8 +41,6 @@ struct USMapView: View {
                     .font(.caption)
                     .foregroundColor(.blue)
                 }
-            } else {
-                MapHeader(game: game)
             }
             
             // Simplified US map using positioned state elements
@@ -127,47 +127,6 @@ struct StateMapElement: View {
     }
 }
 
-/**
- * Map header with title and summary stats
- */
-struct MapHeader: View {
-    let game: Game
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Collection Map")
-                    .font(.headline)
-                
-                Text("\(game.stateCount) states • \(game.plateCount) plates")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 4) {
-                Text(String(format: "%.1f%% Complete", completionPercentage))
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.blue)
-                
-                Text(game.mode.displayName)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-    
-    private var completionPercentage: Double {
-        switch game.mode {
-        case .stateCollection:
-            return Double(game.stateCount) / 51.0 * 100.0
-        case .plateCollection:
-            return min(Double(game.plateCount) / 200.0 * 100.0, 100.0)
-        }
-    }
-}
 
 /**
  * Map legend showing color meanings

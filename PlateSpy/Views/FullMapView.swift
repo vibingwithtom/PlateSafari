@@ -23,8 +23,8 @@ struct FullMapView: View {
                     // Game info header
                     GameMapHeader(game: game)
                     
-                    // Interactive map
-                    USMapView(game: game, compactMode: false)
+                    // Interactive map (without header)
+                    USMapView(game: game, compactMode: false, showHeader: false)
                 }
                 .padding()
             }

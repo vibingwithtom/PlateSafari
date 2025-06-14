@@ -190,8 +190,8 @@ struct GameProgressCard: View {
                 PlateCollectionProgress(game: game)
             }
             
-            // Interactive map
-            USMapView(game: game, compactMode: true)
+            // Map access button
+            MapAccessButton(game: game)
         }
         .padding()
         .background(Color(.systemGroupedBackground))
@@ -280,6 +280,40 @@ struct PlateCollectionProgress: View {
     }
 }
 
+/**
+ * Simple button to access full map view
+ */
+struct MapAccessButton: View {
+    let game: Game
+    @State private var showingFullMap = false
+    
+    var body: some View {
+        Button(action: { showingFullMap = true }) {
+            HStack {
+                Image(systemName: "map")
+                    .foregroundColor(.blue)
+                
+                Text("View Collection Map")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.blue)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(8)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .sheet(isPresented: $showingFullMap) {
+            FullMapView(game: game)
+        }
+    }
+}
 
 #Preview {
     ProgressTrackingView()
