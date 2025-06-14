@@ -244,7 +244,7 @@ struct PlateCollectionProgress: View {
     let game: Game
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Collection Progress")
                     .font(.subheadline)
@@ -257,26 +257,85 @@ struct PlateCollectionProgress: View {
                     .foregroundColor(.secondary)
             }
             
-            // Top states by plate count
-            let topStates = game.stateProgress.sorted { $0.value > $1.value }.prefix(5)
+            // Top 5 states section
+            if !game.stateProgress.isEmpty {
+                TopFiveStatesView(game: game)
+            }
+        }
+    }
+}
+
+/**
+ * Top 5 states component for plate collection games
+ * Shows clearly labeled ranking of states by plates collected
+ */
+struct TopFiveStatesView: View {
+    let game: Game
+    
+    private var topStates: [(String, Int)] {
+        let sorted = game.stateProgress.sorted { $0.value > $1.value }
+        return Array(sorted.prefix(5))
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Top \(min(topStates.count, 5)) States by Plates Collected")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+            }
             
-            VStack(spacing: 4) {
-                ForEach(Array(topStates), id: \.key) { state, count in
-                    HStack {
-                        Text(state)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                        
-                        Spacer()
-                        
-                        Text("\(count)")
-                            .font(.caption)
-                            .foregroundColor(.blue)
-                    }
+            VStack(spacing: 6) {
+                ForEach(Array(topStates.enumerated()), id: \.element.0) { index, stateData in
+                    let (state, count) = stateData
+                    TopStateRow(
+                        rank: index + 1,
+                        state: state,
+                        plateCount: count
+                    )
                 }
             }
-            .padding(.vertical, 4)
         }
+        .padding(.vertical, 4)
+    }
+}
+
+/**
+ * Individual row showing state ranking in top 5 list
+ */
+struct TopStateRow: View {
+    let rank: Int
+    let state: String
+    let plateCount: Int
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            // Rank indicator
+            Text("\(rank)")
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundColor(.blue)
+                .frame(width: 16, alignment: .center)
+            
+            // State name
+            Text(state)
+                .font(.caption)
+                .fontWeight(.medium)
+            
+            Spacer()
+            
+            // Plate count
+            Text("\(plateCount) plate\(plateCount == 1 ? "" : "s")")
+                .font(.caption)
+                .foregroundColor(.blue)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(Color(.systemBackground))
+        .cornerRadius(6)
     }
 }
 
