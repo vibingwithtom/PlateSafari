@@ -10,7 +10,13 @@ import UIKit
 
 /**
  * Service for loading and caching license plate images
- * Handles both bundle resources and file system images efficiently
+ * 
+ * Features:
+ * - Efficient memory caching with automatic cleanup on memory pressure
+ * - Handles shared images (like MISSING.png) across multiple states
+ * - Falls back gracefully from bundle resources to file system
+ * - Optimizes memory usage by sharing common images between plates
+ * - Thread-safe asynchronous loading with completion handlers
  */
 class PlateImageService: ObservableObject {
     static let shared = PlateImageService()
@@ -42,15 +48,32 @@ class PlateImageService: ObservableObject {
     
     /**
      * Load image for a plate metadata object
-     * Returns cached image immediately if available, otherwise loads asynchronously
+     * 
+     * Uses two-tier caching strategy:
+     * 1. Plate-specific cache (state-filename combination)
+     * 2. Shared cache for common images (filename only)
+     * 
+     * @param plate The plate metadata containing state and image filename
+     * @param completion Callback with loaded UIImage or nil if failed
      */
     func loadImage(for plate: PlateMetadata, completion: @escaping (UIImage?) -> Void) {
-        let cacheKey = "\(plate.state)-\(plate.plateImage)" as NSString
+        let plateCacheKey = "\(plate.state)-\(plate.plateImage)" as NSString
+        let imageCacheKey = plate.plateImage as NSString // Shared cache key for identical images
         
-        // Check cache first
-        if let cachedImage = imageCache.object(forKey: cacheKey) {
+        // Check plate-specific cache first
+        if let cachedImage = imageCache.object(forKey: plateCacheKey) {
             DispatchQueue.main.async {
                 completion(cachedImage)
+            }
+            return
+        }
+        
+        // Check shared image cache for common files like MISSING.png
+        if let sharedImage = bundleImageCache.object(forKey: imageCacheKey) {
+            // Cache it with plate-specific key too
+            imageCache.setObject(sharedImage, forKey: plateCacheKey)
+            DispatchQueue.main.async {
+                completion(sharedImage)
             }
             return
         }
@@ -59,9 +82,14 @@ class PlateImageService: ObservableObject {
         processingQueue.async { [weak self] in
             let image = self?.loadImageSync(for: plate)
             
-            // Cache the result
+            // Cache the result with both keys
             if let image = image {
-                self?.imageCache.setObject(image, forKey: cacheKey)
+                self?.imageCache.setObject(image, forKey: plateCacheKey)
+                
+                // Cache common images (like MISSING.png) with shared key for efficiency
+                if self?.isCommonImage(plate.plateImage) == true {
+                    self?.bundleImageCache.setObject(image, forKey: imageCacheKey)
+                }
             }
             
             DispatchQueue.main.async {
@@ -99,20 +127,57 @@ class PlateImageService: ObservableObject {
             return cachedImage
         }
         
-        // Try to load from bundle
-        let resourceName = imageName.replacingOccurrences(of: "\\.[^.]*$", with: "", options: .regularExpression)
-        let pathExtension = (imageName as NSString).pathExtension
+        // Construct direct path to image in bundle
+        guard let bundlePath = Bundle.main.resourcePath else { return nil }
+        let imagePath = "\(bundlePath)/Resources/SourcePlateImages/\(state)/\(imageName)"
         
-        guard let imagePath = Bundle.main.path(forResource: "SourcePlateImages/\(state)/\(resourceName)", ofType: pathExtension),
-              let image = UIImage(contentsOfFile: imagePath) else {
-            return nil
+        // Try to load from the specific state folder first
+        if FileManager.default.fileExists(atPath: imagePath),
+           let image = UIImage(contentsOfFile: imagePath) {
+            
+            let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
+            bundleImageCache.setObject(resizedImage, forKey: cacheKey)
+            return resizedImage
         }
         
-        // Resize image for better performance
-        let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
-        bundleImageCache.setObject(resizedImage, forKey: cacheKey)
+        // If it's a common image and not found in the specific state, try to find it in any state folder
+        if isCommonImage(imageName) {
+            return loadCommonImageFromAnyState(imageName: imageName, bundlePath: bundlePath, cacheKey: cacheKey)
+        }
         
-        return resizedImage
+        return nil
+    }
+    
+    /**
+     * Load common images (like MISSING.png) from any available state folder
+     */
+    private func loadCommonImageFromAnyState(imageName: String, bundlePath: String, cacheKey: NSString) -> UIImage? {
+        let sourceImagesPath = "\(bundlePath)/Resources/SourcePlateImages"
+        
+        do {
+            let stateDirectories = try FileManager.default.contentsOfDirectory(atPath: sourceImagesPath)
+            
+            for stateDir in stateDirectories {
+                let imagePath = "\(sourceImagesPath)/\(stateDir)/\(imageName)"
+                
+                if FileManager.default.fileExists(atPath: imagePath),
+                   let image = UIImage(contentsOfFile: imagePath) {
+                    
+                    let resizedImage = resizeImage(image, targetSize: CGSize(width: 300, height: 150))
+                    bundleImageCache.setObject(resizedImage, forKey: cacheKey)
+                    
+                    // Also cache with the shared key for future efficiency
+                    let sharedKey = imageName as NSString
+                    bundleImageCache.setObject(resizedImage, forKey: sharedKey)
+                    
+                    return resizedImage
+                }
+            }
+        } catch {
+            print("⚠️ Error searching for common image \(imageName): \(error)")
+        }
+        
+        return nil
     }
     
     /**
@@ -231,6 +296,25 @@ class PlateImageService: ObservableObject {
                 }
             }
         }
+    }
+    
+    /**
+     * Check if an image is commonly reused across states
+     * These images should be cached with shared keys for efficiency
+     */
+    private func isCommonImage(_ imageName: String) -> Bool {
+        let commonImages = [
+            "MISSING.png",
+            "missing.png",
+            "Missing.png",
+            "standard.jpg",
+            "standard-plate.jpg",
+            "regular.jpg",
+            "disabled.png",
+            "antique.gif",
+            "moped.gif"
+        ]
+        return commonImages.contains(imageName)
     }
     
     /**
