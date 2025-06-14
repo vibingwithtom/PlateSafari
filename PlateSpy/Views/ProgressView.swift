@@ -15,7 +15,7 @@ struct ProgressTrackingView: View {
     @EnvironmentObject var gameManager: GameManagerService
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     if gameManager.games.isEmpty {
@@ -75,31 +75,34 @@ struct OverallStatsCard: View {
             Text("Overall Statistics")
                 .font(.headline)
             
-            LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
-                OverallStatItem(
-                    title: "Total Games",
-                    value: "\(gameManager.games.count)",
-                    color: .blue
-                )
-                
-                OverallStatItem(
-                    title: "Total Plates",
-                    value: "\(totalPlates)",
-                    color: .green
-                )
-                
-                OverallStatItem(
-                    title: "Unique States",
-                    value: "\(uniqueStates)",
-                    color: .orange
-                )
-                
-                OverallStatItem(
-                    title: "Total Score",
-                    value: "\(totalScore)",
-                    color: .purple
-                )
+            GeometryReader { geometry in
+                LazyVGrid(columns: ResponsiveLayout.responsiveColumns(geometry: geometry, portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
+                    OverallStatItem(
+                        title: "Total Games",
+                        value: "\(gameManager.games.count)",
+                        color: .blue
+                    )
+                    
+                    OverallStatItem(
+                        title: "Total Plates",
+                        value: "\(totalPlates)",
+                        color: .green
+                    )
+                    
+                    OverallStatItem(
+                        title: "Unique States",
+                        value: "\(uniqueStates)",
+                        color: .orange
+                    )
+                    
+                    OverallStatItem(
+                        title: "Total Score",
+                        value: "\(totalScore)",
+                        color: .purple
+                    )
+                }
             }
+            .frame(height: 120) // Fixed height for the grid
         }
         .padding()
         .background(Color(.systemGroupedBackground))

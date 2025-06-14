@@ -21,7 +21,7 @@ struct PlatesBrowserView: View {
     @State private var selectedRarity: PlateRarity?
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 if plateDataService.isLoading {
                     LoadingView(message: "Loading license plates...")
@@ -314,7 +314,7 @@ struct StatePickerSheet: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Search bar
                 HStack {
@@ -489,13 +489,15 @@ struct PlatesGridView: View {
         if plates.isEmpty {
             EmptyPlatesView()
         } else {
-            ScrollView {
-                LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
-                    ForEach(plates) { plate in
-                        PlateCardView(plate: plate)
+            GeometryReader { geometry in
+                ScrollView {
+                    LazyVGrid(columns: ResponsiveLayout.responsiveColumns(geometry: geometry, portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
+                        ForEach(plates) { plate in
+                            PlateCardView(plate: plate)
+                        }
                     }
+                    .padding()
                 }
-                .padding()
             }
         }
     }
@@ -516,36 +518,38 @@ struct AllStatesPlatesGridView: View {
                 EmptyPlatesView()
             }
         } else {
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    // Group plates by state and display each group
-                    ForEach(groupedPlates.keys.sorted(), id: \.self) { state in
-                        VStack(alignment: .leading, spacing: 12) {
-                            // State header
-                            HStack {
-                                Text(state)
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                
-                                Spacer()
-                                
-                                Text("\(groupedPlates[state]?.count ?? 0) plate\(groupedPlates[state]?.count == 1 ? "" : "s")")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.horizontal)
-                            
-                            // Plates grid for this state
-                            LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
-                                ForEach(groupedPlates[state] ?? []) { plate in
-                                    PlateCardView(plate: plate)
+            GeometryReader { geometry in
+                ScrollView {
+                    LazyVStack(spacing: 20) {
+                        // Group plates by state and display each group
+                        ForEach(groupedPlates.keys.sorted(), id: \.self) { state in
+                            VStack(alignment: .leading, spacing: 12) {
+                                // State header
+                                HStack {
+                                    Text(state)
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                    
+                                    Spacer()
+                                    
+                                    Text("\(groupedPlates[state]?.count ?? 0) plate\(groupedPlates[state]?.count == 1 ? "" : "s")")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
                                 }
+                                .padding(.horizontal)
+                                
+                                // Plates grid for this state
+                                LazyVGrid(columns: ResponsiveLayout.responsiveColumns(geometry: geometry, portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
+                                    ForEach(groupedPlates[state] ?? []) { plate in
+                                        PlateCardView(plate: plate)
+                                    }
+                                }
+                                .padding(.horizontal)
                             }
-                            .padding(.horizontal)
                         }
                     }
+                    .padding(.vertical)
                 }
-                .padding(.vertical)
             }
         }
     }

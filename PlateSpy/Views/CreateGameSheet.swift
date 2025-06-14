@@ -21,7 +21,7 @@ struct CreateGameSheet: View {
     @State private var errorMessage = ""
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section {
                     // Game mode selection

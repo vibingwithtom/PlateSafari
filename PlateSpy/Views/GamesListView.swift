@@ -20,7 +20,7 @@ struct GamesListView: View {
     @State private var showingDeleteConfirmation = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 if gameManager.games.isEmpty {
                     // Empty state with helpful guidance
@@ -65,7 +65,6 @@ struct GamesListView: View {
                 }
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle()) // Better for iPhone
     }
     
     /**

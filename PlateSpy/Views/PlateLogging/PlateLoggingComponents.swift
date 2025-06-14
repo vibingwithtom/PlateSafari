@@ -57,8 +57,8 @@ struct StateSection: View {
     let states: [String]
     @Binding var selectedState: String?
     
-    private var columns: [GridItem] {
-        ResponsiveLayout.adaptiveGridColumns(portraitColumns: 4, landscapeColumns: 6, spacing: 8)
+    private func columns(for geometry: GeometryProxy) -> [GridItem] {
+        ResponsiveLayout.responsiveColumns(geometry: geometry, portraitColumns: 4, landscapeColumns: 6, spacing: 8)
     }
     
     var body: some View {
@@ -67,15 +67,18 @@ struct StateSection: View {
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(states, id: \.self) { state in
-                    StateSelectionButton(
-                        state: state,
-                        isSelected: selectedState == state,
-                        action: { selectedState = state }
-                    )
+            GeometryReader { geometry in
+                LazyVGrid(columns: columns(for: geometry), spacing: 8) {
+                    ForEach(states, id: \.self) { state in
+                        StateSelectionButton(
+                            state: state,
+                            isSelected: selectedState == state,
+                            action: { selectedState = state }
+                        )
+                    }
                 }
             }
+            .frame(height: 120) // Fixed height for the grid
         }
         .padding()
         .background(Color(.systemGroupedBackground))
@@ -190,16 +193,17 @@ struct PlateSelectionGrid: View {
     @Binding var selectedPlate: PlateMetadata?
     @EnvironmentObject var gameManager: GameManagerService
     
-    private var columns: [GridItem] {
-        ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 3, spacing: 12)
+    private func columns(for geometry: GeometryProxy) -> [GridItem] {
+        ResponsiveLayout.responsiveColumns(geometry: geometry, portraitColumns: 2, landscapeColumns: 3, spacing: 12)
     }
     
     var body: some View {
-        ScrollView {
-            if plates.isEmpty {
-                EmptyPlateSelectionView()
-            } else {
-                LazyVGrid(columns: columns, spacing: 12) {
+        GeometryReader { geometry in
+            ScrollView {
+                if plates.isEmpty {
+                    EmptyPlateSelectionView()
+                } else {
+                    LazyVGrid(columns: columns(for: geometry), spacing: 12) {
                     ForEach(plates) { plate in
                         PlateSelectionCard(
                             plate: plate,
@@ -214,6 +218,7 @@ struct PlateSelectionGrid: View {
                     }
                 }
                 .padding()
+            }
             }
         }
     }
@@ -478,7 +483,7 @@ struct FilterSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section("Category") {
                     Button("All Categories") {

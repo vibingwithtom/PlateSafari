@@ -42,7 +42,7 @@ struct GameDetailView: View {
         .navigationTitle(gameManager.displayName(for: game))
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $showingPlateSelector) {
-            PlateSelectionWorkflow(game: game)
+            StreamlinedPlateLoggingView(game: game)
         }
     }
 }
@@ -93,12 +93,15 @@ struct GameStatsCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             if let stats = gameManager.gameStatistics(for: game.id) {
-                LazyVGrid(columns: ResponsiveLayout.adaptiveGridColumns(portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
-                    StatItem(title: "Plates Collected", value: "\(stats.totalPlates)")
-                    StatItem(title: "States", value: "\(stats.uniqueStates)")
-                    StatItem(title: "Total Score", value: "\(stats.totalScore)")
-                    StatItem(title: "Completion", value: String(format: "%.1f%%", stats.completionPercentage))
+                GeometryReader { geometry in
+                    LazyVGrid(columns: ResponsiveLayout.responsiveColumns(geometry: geometry, portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
+                        StatItem(title: "Plates Collected", value: "\(stats.totalPlates)")
+                        StatItem(title: "States", value: "\(stats.uniqueStates)")
+                        StatItem(title: "Total Score", value: "\(stats.totalScore)")
+                        StatItem(title: "Completion", value: String(format: "%.1f%%", stats.completionPercentage))
+                    }
                 }
+                .frame(height: 120) // Fixed height for the grid
                 
                 // Progress bar for state collection
                 if game.mode == .stateCollection {
@@ -310,7 +313,7 @@ struct GameActionsSection: View {
 
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         GameDetailView(game: Game(mode: .stateCollection, name: "My Collection"))
     }
     .environmentObject(GameManagerService())

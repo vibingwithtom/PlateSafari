@@ -11,22 +11,40 @@ import SwiftUI
  * Responsive layout utilities for landscape orientation support
  * Provides adaptive grid columns and layout helpers
  */
-extension View {
-    /**
-     * Creates responsive grid columns based on screen width
-     * Returns appropriate column count for current device orientation
-     */
-    func responsiveGridColumns(
-        minimumWidth: CGFloat = 160,
-        spacing: CGFloat = 16,
-        maxColumns: Int = 6
-    ) -> [GridItem] {
-        let screenWidth = UIScreen.main.bounds.width
-        let availableWidth = screenWidth - (spacing * 2) // Account for padding
-        let columnsToFit = Int(availableWidth / (minimumWidth + spacing))
-        let columnCount = min(max(columnsToFit, 1), maxColumns)
-        
+
+/**
+ * View modifier for responsive grid layouts
+ */
+struct ResponsiveGridModifier: ViewModifier {
+    let portraitColumns: Int
+    let landscapeColumns: Int
+    let spacing: CGFloat
+    
+    func body(content: Content) -> some View {
+        GeometryReader { geometry in
+            content
+                .environment(\.responsiveColumns, responsiveColumns(for: geometry.size))
+        }
+    }
+    
+    private func responsiveColumns(for size: CGSize) -> [GridItem] {
+        let isLandscape = size.width > size.height
+        let columnCount = isLandscape ? landscapeColumns : portraitColumns
         return Array(repeating: GridItem(.flexible(), spacing: spacing), count: columnCount)
+    }
+}
+
+/**
+ * Environment key for responsive columns
+ */
+private struct ResponsiveColumnsKey: EnvironmentKey {
+    static let defaultValue: [GridItem] = Array(repeating: GridItem(.flexible()), count: 2)
+}
+
+extension EnvironmentValues {
+    var responsiveColumns: [GridItem] {
+        get { self[ResponsiveColumnsKey.self] }
+        set { self[ResponsiveColumnsKey.self] = newValue }
     }
 }
 
@@ -49,21 +67,30 @@ struct ResponsiveLayout {
     }
     
     /**
-     * Check if device is in landscape orientation
-     */
-    static var isLandscape: Bool {
-        UIDevice.current.orientation.isLandscape || 
-        UIScreen.main.bounds.width > UIScreen.main.bounds.height
-    }
-    
-    /**
-     * Get adaptive grid columns for current orientation
+     * Get adaptive grid columns based on screen size
      */
     static func adaptiveGridColumns(
         portraitColumns: Int = 2,
         landscapeColumns: Int = 4,
         spacing: CGFloat = 16
     ) -> [GridItem] {
+        // Use a simple heuristic based on screen bounds
+        let screenSize = UIScreen.main.bounds.size
+        let isLandscape = screenSize.width > screenSize.height
+        let columnCount = isLandscape ? landscapeColumns : portraitColumns
+        return Array(repeating: GridItem(.flexible(), spacing: spacing), count: columnCount)
+    }
+    
+    /**
+     * Create responsive grid columns using GeometryReader
+     */
+    static func responsiveColumns(
+        geometry: GeometryProxy,
+        portraitColumns: Int = 2,
+        landscapeColumns: Int = 4,
+        spacing: CGFloat = 16
+    ) -> [GridItem] {
+        let isLandscape = geometry.size.width > geometry.size.height
         let columnCount = isLandscape ? landscapeColumns : portraitColumns
         return Array(repeating: GridItem(.flexible(), spacing: spacing), count: columnCount)
     }

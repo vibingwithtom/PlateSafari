@@ -19,7 +19,7 @@ struct SettingsView: View {
     @State private var showingAbout = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 // Data management section
                 Section {
@@ -215,7 +215,7 @@ struct AboutView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
                     // App icon and title

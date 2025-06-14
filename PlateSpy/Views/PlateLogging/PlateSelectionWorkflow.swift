@@ -25,7 +25,7 @@ struct PlateSelectionWorkflow: View {
     @State private var errorMessage = ""
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Progress indicator
                 WorkflowProgressView(currentStep: currentStep)
