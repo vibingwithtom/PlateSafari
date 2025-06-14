@@ -115,7 +115,7 @@ struct BrowserContentView: View {
 }
 
 /**
- * State selection interface with recent states at top
+ * Compact state selection interface optimized for space efficiency
  */
 struct StateSelectionView: View {
     @EnvironmentObject var plateDataService: PlateDataService
@@ -124,15 +124,19 @@ struct StateSelectionView: View {
     @Binding var selectedState: String?
     
     var body: some View {
-        VStack {
-            // Recent states section
+        VStack(spacing: 12) {
+            // Recent states (if any) - keep as horizontal scroll
             if !gameManager.userPreferences.recentStates.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Recent")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal)
+                    HStack {
+                        Text("Recent")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
@@ -149,25 +153,11 @@ struct StateSelectionView: View {
                 }
             }
             
-            // All states section
-            VStack(alignment: .leading, spacing: 8) {
-                Text("All States")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal)
-                
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 8) {
-                    ForEach(plateDataService.availableStates, id: \.self) { state in
-                        StateButton(
-                            state: state,
-                            isSelected: selectedState == state,
-                            action: { selectedState = state }
-                        )
-                    }
-                }
-                .padding(.horizontal)
-            }
+            // Compact state picker
+            CompactStatePicker(
+                availableStates: plateDataService.availableStates,
+                selectedState: $selectedState
+            )
         }
     }
 }
@@ -192,6 +182,169 @@ struct StateButton: View {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(isSelected ? Color.blue : Color(.systemGray6))
                 )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+/**
+ * Compact state picker that uses minimal vertical space
+ */
+struct CompactStatePicker: View {
+    let availableStates: [String]
+    @Binding var selectedState: String?
+    @State private var showingStatePicker = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("All States")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            // Compact state selector button
+            Button(action: { showingStatePicker = true }) {
+                HStack {
+                    Image(systemName: "map")
+                        .foregroundColor(.blue)
+                    
+                    Text(selectedState ?? "Select a state...")
+                        .font(.body)
+                        .fontWeight(selectedState != nil ? .medium : .regular)
+                        .foregroundColor(selectedState != nil ? .primary : .secondary)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.down")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .padding(.horizontal)
+            .sheet(isPresented: $showingStatePicker) {
+                StatePickerSheet(
+                    availableStates: availableStates,
+                    selectedState: $selectedState
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Modal sheet for state selection
+ */
+struct StatePickerSheet: View {
+    let availableStates: [String]
+    @Binding var selectedState: String?
+    @Environment(\.dismiss) private var dismiss
+    @State private var searchText = ""
+    
+    private var filteredStates: [String] {
+        if searchText.isEmpty {
+            return availableStates
+        } else {
+            return availableStates.filter { state in
+                let stateName = USStatePositions.fullName(for: state) ?? state
+                return state.localizedCaseInsensitiveContains(searchText) ||
+                       stateName.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                // Search bar
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    
+                    TextField("Search states...", text: $searchText)
+                        .textFieldStyle(PlainTextFieldStyle())
+                    
+                    if !searchText.isEmpty {
+                        Button(action: { searchText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding()
+                
+                // States list
+                List {
+                    ForEach(filteredStates, id: \.self) { state in
+                        StatePickerRow(
+                            state: state,
+                            isSelected: selectedState == state,
+                            onSelect: {
+                                selectedState = state
+                                dismiss()
+                            }
+                        )
+                    }
+                }
+                .listStyle(PlainListStyle())
+            }
+            .navigationTitle("Select State")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium, .large])
+    }
+}
+
+/**
+ * Individual row in the state picker sheet
+ */
+struct StatePickerRow: View {
+    let state: String
+    let isSelected: Bool
+    let onSelect: () -> Void
+    
+    var body: some View {
+        Button(action: onSelect) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(state)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    
+                    if let fullName = USStatePositions.fullName(for: state) {
+                        Text(fullName)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                Spacer()
+                
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.blue)
+                        .fontWeight(.semibold)
+                }
+            }
+            .padding(.vertical, 4)
         }
         .buttonStyle(PlainButtonStyle())
     }
