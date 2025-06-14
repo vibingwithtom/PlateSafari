@@ -135,24 +135,10 @@ struct GameRowView: View {
                     .scaleEffect(x: 1, y: 0.7) // Make progress bar thinner
             }
             
-            // Date information
-            HStack {
-                if game.plateCount > 0 && abs(game.lastPlayedDate.timeIntervalSince(game.createdDate)) > 60 {
-                    // Show "Last played" only if plates have been collected and it's meaningfully different from creation
-                    Text("Last played: \(game.lastPlayedDate, formatter: relativeDateFormatter)")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                } else {
-                    // Show creation date for new/unused games
-                    Text("Created: \(game.createdDate, formatter: relativeDateFormatter)")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                // Score for enhanced metadata
-                if game.totalScore > game.plateCount {
+            // Score for enhanced metadata (if available)
+            if game.totalScore > game.plateCount {
+                HStack {
+                    Spacer()
                     Text("\(game.totalScore) pts")
                         .font(.caption2)
                         .foregroundColor(.orange)
@@ -203,14 +189,6 @@ struct EmptyGamesView: View {
     }
 }
 
-/**
- * Date formatter for showing relative dates (e.g., "2 hours ago")
- */
-private let relativeDateFormatter: RelativeDateTimeFormatter = {
-    let formatter = RelativeDateTimeFormatter()
-    formatter.unitsStyle = .abbreviated
-    return formatter
-}()
 
 #Preview {
     GamesListView()

@@ -72,29 +72,6 @@ struct GameOverviewCard: View {
                 Spacer()
             }
             
-            Divider()
-            
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Created")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    Text(game.createdDate, style: .date)
-                        .font(.subheadline)
-                }
-                
-                Spacer()
-                
-                VStack(alignment: .trailing) {
-                    Text("Last Played")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    Text(game.lastPlayedDate, style: .relative)
-                        .font(.subheadline)
-                }
-            }
         }
         .padding()
         .background(Color(.systemGroupedBackground))
