@@ -401,6 +401,8 @@ struct StateFilterSheet: View {
                                 .foregroundColor(.blue)
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
                 }
                 
                 // Individual states
@@ -420,6 +422,8 @@ struct StateFilterSheet: View {
                                     .foregroundColor(.blue)
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                     }
                 }
             }

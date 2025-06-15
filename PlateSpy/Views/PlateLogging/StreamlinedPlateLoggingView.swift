@@ -674,6 +674,8 @@ struct CustomStatePickerRow: View {
                     .foregroundColor(.secondary)
             }
             .padding(.vertical, 4)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
     }
