@@ -81,6 +81,12 @@ struct PlateSelectionWorkflow: View {
                 Text(errorMessage)
             }
         }
+        .onAppear {
+            // Pre-fill with last selected state if available
+            if selectedState == nil, let lastState = gameManager.userPreferences.lastSelectedState {
+                selectedState = lastState
+            }
+        }
     }
     
     /**

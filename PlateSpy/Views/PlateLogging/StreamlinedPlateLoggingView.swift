@@ -94,6 +94,12 @@ struct StreamlinedPlateLoggingView: View {
                 FilterSheet(selectedCategory: $selectedCategory)
             }
         }
+        .onAppear {
+            // Pre-fill with last selected state if available
+            if selectedState == nil, let lastState = gameManager.userPreferences.lastSelectedState {
+                selectedState = lastState
+            }
+        }
     }
     
     /**
