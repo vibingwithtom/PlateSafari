@@ -34,6 +34,7 @@ struct GameDetailView: View {
                 
                 // Action buttons
                 GameActionsSection(
+                    game: game,
                     onLogPlate: { showingPlateSelector = true }
                 )
             }
@@ -269,7 +270,9 @@ struct RecentPlateCard: View {
  * Game action buttons section
  */
 struct GameActionsSection: View {
+    let game: Game
     let onLogPlate: () -> Void
+    @State private var showingMapView = false
     
     var body: some View {
         VStack(spacing: 12) {
@@ -284,7 +287,7 @@ struct GameActionsSection: View {
             }
             
             HStack(spacing: 12) {
-                Button(action: {}) {
+                Button(action: { showingMapView = true }) {
                     Label("View Map", systemImage: "map")
                         .font(.subheadline)
                         .foregroundColor(.blue)
@@ -308,6 +311,9 @@ struct GameActionsSection: View {
         .padding()
         .background(Color(.systemGroupedBackground))
         .cornerRadius(12)
+        .sheet(isPresented: $showingMapView) {
+            FullMapView(game: game)
+        }
     }
 }
 
