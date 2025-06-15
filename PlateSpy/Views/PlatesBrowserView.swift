@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
- * Browse license plates by state with search and filtering
+ * Plate Gallery - browse license plates by state with search and filtering
  * Supports both basic browsing and enhanced filtering when metadata available
  */
 struct PlatesBrowserView: View {
@@ -38,7 +38,7 @@ struct PlatesBrowserView: View {
                     )
                 }
             }
-            .navigationTitle("Browse Plates")
+            .navigationTitle("Plate Gallery")
             .searchable(text: $searchText, prompt: "Search plates...")
         }
     }

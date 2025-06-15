@@ -351,7 +351,7 @@ struct StateSuggestionsView: View {
                     Button(action: { showingAllStates = true }) {
                         HStack {
                             Image(systemName: "list.bullet")
-                            Text("Browse All States")
+                            Text("View All States")
                         }
                         .font(.subheadline)
                         .foregroundColor(.blue)

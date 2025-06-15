@@ -65,7 +65,7 @@ PlateSpy is a SwiftUI iOS app for collecting license plate images in a gamified 
 
 **Tab-Based Navigation**: MainTabView with 4 tabs
 - Games: Primary entry point, game management
-- Browse: State-filtered plate exploration with search
+- Plate Gallery: State-filtered plate exploration with search
 - Progress: Collection tracking and maps
 - Settings: App preferences and data management
 

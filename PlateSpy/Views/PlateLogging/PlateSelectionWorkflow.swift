@@ -244,7 +244,7 @@ struct StateSelectionStep: View {
 
 /**
  * Step 2: Plate Selection
- * Browse and search plates within the selected state
+ * Search and view plates within the selected state
  */
 struct PlateSelectionStep: View {
     let game: Game

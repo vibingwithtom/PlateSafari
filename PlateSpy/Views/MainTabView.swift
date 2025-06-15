@@ -24,11 +24,11 @@ struct MainTabView: View {
                     Text("Games")
                 }
             
-            // Browse plates tab - Explore the plate database
+            // Plate Gallery tab - Explore the plate database
             PlatesBrowserView()
                 .tabItem {
                     Image(systemName: "square.grid.3x3")
-                    Text("Browse")
+                    Text("Plate Gallery")
                 }
             
             // Progress tab - View collection progress and maps
