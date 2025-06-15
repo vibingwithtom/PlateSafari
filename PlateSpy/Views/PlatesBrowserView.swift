@@ -125,8 +125,10 @@ struct BrowserContentView: View {
         // Apply search filter
         if !searchText.isEmpty {
             plates = plates.filter { plate in
-                plate.plateTitle.localizedCaseInsensitiveContains(searchText) ||
-                plate.state.localizedCaseInsensitiveContains(searchText)
+                let fullStateName = USStatePositions.fullName(for: plate.state) ?? plate.state
+                return plate.plateTitle.localizedCaseInsensitiveContains(searchText) ||
+                       plate.state.localizedCaseInsensitiveContains(searchText) ||
+                       fullStateName.localizedCaseInsensitiveContains(searchText)
             }
         }
         
@@ -142,7 +144,9 @@ struct BrowserContentView: View {
         
         return plates.sorted { 
             if $0.state != $1.state {
-                return $0.state < $1.state
+                let fullName1 = USStatePositions.fullName(for: $0.state) ?? $0.state
+                let fullName2 = USStatePositions.fullName(for: $1.state) ?? $1.state
+                return fullName1 < fullName2
             }
             return $0.plateTitle < $1.plateTitle
         }
@@ -207,7 +211,7 @@ struct StateButton: View {
     
     var body: some View {
         Button(action: action) {
-            Text(state)
+            Text(USStatePositions.fullName(for: state) ?? state)
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(isSelected ? .white : .primary)
@@ -257,7 +261,7 @@ struct CompactStatePicker: View {
                     Image(systemName: "map")
                         .foregroundColor(.blue)
                     
-                    Text(selectedState ?? "Select a state...")
+                    Text(selectedState != nil ? (USStatePositions.fullName(for: selectedState!) ?? selectedState!) : "Select a state...")
                         .font(.body)
                         .fontWeight(selectedState != nil ? .medium : .regular)
                         .foregroundColor(selectedState != nil ? .primary : .secondary)
@@ -522,11 +526,11 @@ struct AllStatesPlatesGridView: View {
                 ScrollView {
                     LazyVStack(spacing: 20) {
                         // Group plates by state and display each group
-                        ForEach(groupedPlates.keys.sorted(), id: \.self) { state in
+                        ForEach(sortedStateKeys, id: \.self) { state in
                             VStack(alignment: .leading, spacing: 12) {
                                 // State header
                                 HStack {
-                                    Text(state)
+                                    Text(USStatePositions.fullName(for: state) ?? state)
                                         .font(.headline)
                                         .fontWeight(.semibold)
                                     
@@ -556,6 +560,14 @@ struct AllStatesPlatesGridView: View {
     
     private var groupedPlates: [String: [PlateMetadata]] {
         Dictionary(grouping: plates) { $0.state }
+    }
+    
+    private var sortedStateKeys: [String] {
+        groupedPlates.keys.sorted { state1, state2 in
+            let fullName1 = USStatePositions.fullName(for: state1) ?? state1
+            let fullName2 = USStatePositions.fullName(for: state2) ?? state2
+            return fullName1 < fullName2
+        }
     }
 }
 
