@@ -273,6 +273,7 @@ struct GameActionsSection: View {
     let game: Game
     let onLogPlate: () -> Void
     @State private var showingMapView = false
+    @State private var showingAllPlates = false
     
     var body: some View {
         VStack(spacing: 12) {
@@ -297,8 +298,8 @@ struct GameActionsSection: View {
                         .cornerRadius(8)
                 }
                 
-                Button(action: {}) {
-                    Label("All Plates", systemImage: "list.bullet")
+                Button(action: { showingAllPlates = true }) {
+                    Label("Collected Plates", systemImage: "list.bullet")
                         .font(.subheadline)
                         .foregroundColor(.blue)
                         .frame(maxWidth: .infinity)
@@ -313,6 +314,9 @@ struct GameActionsSection: View {
         .cornerRadius(12)
         .sheet(isPresented: $showingMapView) {
             FullMapView(game: game)
+        }
+        .sheet(isPresented: $showingAllPlates) {
+            AllCollectedPlatesView(game: game)
         }
     }
 }
