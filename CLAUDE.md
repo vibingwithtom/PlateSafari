@@ -121,22 +121,149 @@ PlateSpy is a SwiftUI iOS app for collecting license plate images in a gamified 
 - Explain architectural decisions in comments when non-obvious
 - Keep documentation current with code changes
 
+### GitHub Issue Workflow
+
+**Systematic Issue Processing**:
+- Work through issues in numerical order (lowest first)
+- Use `gh issue list --state open --limit 10` to see current issues
+- Use `gh issue view [number]` to get full issue details
+- Always check issue status and dependencies before starting
+
+**Issue Completion Process**:
+1. Implement the requested changes
+2. Test thoroughly across device orientations
+3. Commit with descriptive messages referencing issue number
+4. Document completion with `gh issue comment [number]` using structured format
+5. Let user review and close issues - don't close automatically
+
 ### Example Workflow:
 ```bash
+# Check current issues
+gh issue list --state open --limit 10
+gh issue view 25
+
 # Create feature branch
-git checkout -b feature/new-game-mode
+git checkout -b feature/issue-25-progress-design
 
 # Make changes with regular commits
 git add -A
-git commit -m "Add new game mode structure
+git commit -m "Unify progress view design - resolves #25
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 
 # Push branch regularly
-git push -u origin feature/new-game-mode
+git push -u origin feature/issue-25-progress-design
 
-# Create PR when ready
-gh pr create --title "Add new game mode" --body "Resolves #12"
+# Document completion
+gh issue comment 25 --body "✅ Issue completed with [details]"
 ```
+
+## Current Development Status
+
+**Recently Completed** (as of 2025-06-15):
+- ✅ Issue #16: Tab renaming to "Games"
+- ✅ Issue #17: State name display in game interface
+- ✅ Issue #18: Default state selection in plate logging
+- ✅ Issue #21: State picker tap targets (already resolved)
+- ✅ Issue #24: Adaptive game name display for long titles
+- ✅ Issue #25: Unified progress view design with uniform stat boxes
+
+**Active Branch**: `feature/ios-architecture-setup`
+
+**Open Issues for Future Work**:
+- Issue #6: Metadata Enhancement Project (Future milestone)
+- Issue #8: Enhanced Game Modes (Future milestone)
+
+**Next Steps**: All immediate development work complete. Ready for user testing and feedback.
+
+## UI Design Patterns
+
+### Consistent Component Design
+
+**Stat Box Pattern** (GameDetailView & ProgressView):
+```swift
+// Uniform height with color coding
+.frame(maxWidth: .infinity, minHeight: 80)
+.padding(.vertical, 12)
+.background(Color(.systemBackground))
+.cornerRadius(8)
+
+// Text wrapping without truncation
+.fixedSize(horizontal: false, vertical: true)
+.multilineTextAlignment(.center)
+```
+
+**Color Coding Standards**:
+- Green: Plates Collected, positive metrics
+- Orange: States, regional metrics  
+- Purple: Scores, achievements
+- Blue: Completion percentages, progress
+
+**Responsive Grid Pattern**:
+```swift
+LazyVGrid(columns: ResponsiveLayout.responsiveColumns(
+    geometry: geometry, 
+    portraitColumns: 2, 
+    landscapeColumns: 4
+), spacing: 16)
+```
+
+### Navigation Title Handling
+
+**Adaptive Title Display** (GameDetailView):
+- Short names (≤25 chars): `.large` navigation titles
+- Medium names (26-35 chars): `.inline` navigation titles
+- Very long names (>35 chars): Custom header with text wrapping
+
+### Text Handling Principles
+
+**Never Truncate Text**: Always allow proper wrapping with `.fixedSize(horizontal: false, vertical: true)`
+**Maintain Uniform Heights**: Use `minHeight` constraints to ensure visual consistency
+**Responsive Behavior**: Test all text content across iPhone portrait/landscape orientations
+
+## SwiftUI Patterns Used
+
+**Environment Object Injection**:
+```swift
+@EnvironmentObject var gameManager: GameManagerService
+@EnvironmentObject var plateDataService: PlateDataService
+```
+
+**Sheet Presentation**:
+```swift
+@State private var showingSheet = false
+.sheet(isPresented: $showingSheet) { ContentView() }
+```
+
+**AsyncImage with Caching** (via AsyncPlateImageView):
+- Two-tier caching strategy for performance
+- Graceful fallback for missing images
+- Consistent corner radius and aspect ratio
+
+**State Management**:
+- Use `@State` for view-local state
+- Use `@Published` in services for shared state
+- Leverage `@EnvironmentObject` for dependency injection
+
+## Testing Strategy
+
+**UI Consistency Verification**:
+- Test all changes in both portrait and landscape orientations
+- Verify text wrapping behavior with long content
+- Check responsive grid behavior on different screen sizes
+- Validate color consistency across related views
+
+**Build Verification**:
+```bash
+# Always run clean build after UI changes
+xcodebuild -scheme PlateSpy -destination 'platform=iOS Simulator,name=iPhone 16' clean build
+```
+
+**Manual Testing Checklist**:
+- Navigate through all affected screens
+- Test with varying content lengths (short/long game names, etc.)
+- Verify no text truncation occurs
+- Check uniform component heights
+- Test responsive behavior on rotation
