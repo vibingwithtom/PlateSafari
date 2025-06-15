@@ -126,7 +126,7 @@ struct OverallStatsCard: View {
 }
 
 /**
- * Individual overall statistic item
+ * Individual overall statistic item (with uniform height)
  */
 struct OverallStatItem: View {
     let title: String
@@ -144,8 +144,9 @@ struct OverallStatItem: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, minHeight: 80) // Fixed minimum height for uniform appearance
         .padding(.vertical, 12)
         .background(Color(.systemBackground))
         .cornerRadius(8)
