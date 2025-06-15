@@ -34,7 +34,7 @@ struct GameDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 // Custom header for very long game names
                 if shouldShowCustomHeader {
                     GameNameHeader(gameName: gameName)
@@ -115,10 +115,10 @@ struct GameStatsCard: View {
             if let stats = gameManager.gameStatistics(for: game.id) {
                 GeometryReader { geometry in
                     LazyVGrid(columns: ResponsiveLayout.responsiveColumns(geometry: geometry, portraitColumns: 2, landscapeColumns: 4), spacing: 16) {
-                        StatItem(title: "Plates Collected", value: "\(stats.totalPlates)")
-                        StatItem(title: "States", value: "\(stats.uniqueStates)")
-                        StatItem(title: "Total Score", value: "\(stats.totalScore)")
-                        StatItem(title: "Completion", value: String(format: "%.1f%%", stats.completionPercentage))
+                        StatItem(title: "Plates Collected", value: "\(stats.totalPlates)", color: .green)
+                        StatItem(title: "States", value: "\(stats.uniqueStates)", color: .orange)
+                        StatItem(title: "Total Score", value: "\(stats.totalScore)", color: .purple)
+                        StatItem(title: "Completion", value: String(format: "%.1f%%", stats.completionPercentage), color: .blue)
                     }
                 }
                 .frame(height: 120) // Fixed height for the grid
@@ -151,18 +151,19 @@ struct GameStatsCard: View {
 }
 
 /**
- * Individual statistic item
+ * Individual statistic item (matches OverallStatItem design)
  */
 struct StatItem: View {
     let title: String
     let value: String
+    let color: Color
     
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 8) {
             Text(value)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(.blue)
+                .foregroundColor(color)
             
             Text(title)
                 .font(.caption)
@@ -170,7 +171,7 @@ struct StatItem: View {
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
+        .padding(.vertical, 12)
         .background(Color(.systemBackground))
         .cornerRadius(8)
     }

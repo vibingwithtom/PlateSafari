@@ -17,7 +17,7 @@ struct ProgressTrackingView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(spacing: 16) {
                     if gameManager.games.isEmpty {
                         EmptyProgressView()
                     } else {
