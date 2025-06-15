@@ -68,7 +68,8 @@ struct Game: Codable, Identifiable {
             plateImage: metadata.plateImage,
             collectedDate: Date(),
             category: metadata.category,
-            rarity: metadata.rarity
+            rarity: metadata.rarity,
+            source: metadata.source
         )
         
         // For State Collection mode, only allow one plate per state
@@ -170,13 +171,54 @@ enum GameMode: String, CaseIterable, Codable {
  * Tracks when and which plates were collected in each game
  */
 struct CollectedPlate: Codable, Hashable, Identifiable {
-    let id = UUID()
+    let id: UUID
     let state: String
     let plateTitle: String
     let plateImage: String
     let collectedDate: Date
     let category: PlateCategory?
     let rarity: PlateRarity?
+    let source: String?
+    
+    // Custom CodingKeys to handle backward compatibility
+    enum CodingKeys: String, CodingKey {
+        case id, state, plateTitle, plateImage, collectedDate, category, rarity, source
+    }
+    
+    // Custom initializer for backward compatibility
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Handle optional fields with backward compatibility
+        if container.contains(.id) {
+            id = try container.decode(UUID.self, forKey: .id)
+        } else {
+            id = UUID()
+        }
+        
+        // Decode required fields
+        state = try container.decode(String.self, forKey: .state)
+        plateTitle = try container.decode(String.self, forKey: .plateTitle)
+        plateImage = try container.decode(String.self, forKey: .plateImage)
+        collectedDate = try container.decode(Date.self, forKey: .collectedDate)
+        category = try container.decodeIfPresent(PlateCategory.self, forKey: .category)
+        rarity = try container.decodeIfPresent(PlateRarity.self, forKey: .rarity)
+        
+        // Source field might not exist in older saved data
+        source = try container.decodeIfPresent(String.self, forKey: .source)
+    }
+    
+    // Standard initializer
+    init(state: String, plateTitle: String, plateImage: String, collectedDate: Date, category: PlateCategory?, rarity: PlateRarity?, source: String?) {
+        self.id = UUID()
+        self.state = state
+        self.plateTitle = plateTitle
+        self.plateImage = plateImage
+        self.collectedDate = collectedDate
+        self.category = category
+        self.rarity = rarity
+        self.source = source
+    }
     
     /**
      * Hash based on state and plate title for Set operations

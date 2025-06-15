@@ -600,22 +600,30 @@ struct AllStatesEmptyView: View {
  */
 struct PlateCardView: View {
     let plate: PlateMetadata
+    @State private var showingPlateDetail = false
     
     var body: some View {
-        VStack(spacing: 8) {
-            // Async plate image
-            AsyncPlateImageView.card(plate: plate)
-            
-            Text(plate.plateTitle)
-                .font(.caption)
-                .fontWeight(.medium)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
+        Button(action: { showingPlateDetail = true }) {
+            VStack(spacing: 8) {
+                // Async plate image
+                AsyncPlateImageView.card(plate: plate)
+                
+                Text(plate.plateTitle)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .foregroundColor(.primary)
+            }
+            .padding(8)
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(radius: 2)
         }
-        .padding(8)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(radius: 2)
+        .buttonStyle(PlainButtonStyle())
+        .sheet(isPresented: $showingPlateDetail) {
+            PlateDetailView(plate: plate, game: nil)
+        }
     }
 }
 

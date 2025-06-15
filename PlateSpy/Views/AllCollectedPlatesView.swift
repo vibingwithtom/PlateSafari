@@ -259,54 +259,75 @@ struct CollectedPlatesGrid: View {
  */
 struct CollectedPlateCard: View {
     let plate: CollectedPlate
+    @State private var showingPlateDetail = false
+    
+    private var plateMetadata: PlateMetadata {
+        PlateMetadata(
+            state: plate.state,
+            plateTitle: plate.plateTitle,
+            plateImage: plate.plateImage,
+            colorBackground: nil,
+            textColor: nil,
+            visualElements: nil,
+            category: plate.category?.rawValue,
+            rarity: plate.rarity?.rawValue,
+            layoutStyle: nil,
+            confidenceScore: nil,
+            notes: nil,
+            source: plate.source
+        )
+    }
     
     var body: some View {
-        VStack(spacing: 8) {
-            // Plate image
-            AsyncPlateImageView(
-                plate: PlateMetadata(
-                    state: plate.state,
-                    plateTitle: plate.plateTitle,
-                    plateImage: plate.plateImage
-                ),
-                cornerRadius: 8
-            )
-            .aspectRatio(2, contentMode: .fit)
-            
-            // Plate info
-            VStack(spacing: 4) {
-                Text(plate.plateTitle)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
+        Button(action: { showingPlateDetail = true }) {
+            VStack(spacing: 8) {
+                // Plate image
+                AsyncPlateImageView(
+                    plate: plateMetadata,
+                    cornerRadius: 8
+                )
+                .aspectRatio(2, contentMode: .fit)
                 
-                Text(USStatePositions.fullName(for: plate.state) ?? plate.state)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                
-                Text(formatDate(plate.collectedDate))
-                    .font(.caption2)
-                    .foregroundColor(.blue)
-            }
-            
-            // Enhanced metadata badges
-            if plate.category != nil || plate.rarity != nil {
-                HStack(spacing: 4) {
-                    if let category = plate.category {
-                        CategoryBadge(category: category)
-                    }
+                // Plate info
+                VStack(spacing: 4) {
+                    Text(plate.plateTitle)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .foregroundColor(.primary)
                     
-                    if let rarity = plate.rarity {
-                        RarityBadge(rarity: rarity)
+                    Text(USStatePositions.fullName(for: plate.state) ?? plate.state)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    
+                    Text(formatDate(plate.collectedDate))
+                        .font(.caption2)
+                        .foregroundColor(.blue)
+                }
+                
+                // Enhanced metadata badges
+                if plate.category != nil || plate.rarity != nil {
+                    HStack(spacing: 4) {
+                        if let category = plate.category {
+                            CategoryBadge(category: category)
+                        }
+                        
+                        if let rarity = plate.rarity {
+                            RarityBadge(rarity: rarity)
+                        }
                     }
                 }
             }
+            .padding(8)
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(radius: 2)
         }
-        .padding(8)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(radius: 2)
+        .buttonStyle(PlainButtonStyle())
+        .sheet(isPresented: $showingPlateDetail) {
+            PlateDetailView(plate: plateMetadata, game: nil)
+        }
     }
     
     private func formatDate(_ date: Date) -> String {

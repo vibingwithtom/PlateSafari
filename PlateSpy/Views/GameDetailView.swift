@@ -217,42 +217,63 @@ struct RecentPlatesSection: View {
 }
 
 /**
- * Individual recent plate card with remove functionality
+ * Individual recent plate card with remove and view functionality
  */
 struct RecentPlateCard: View {
     let plate: CollectedPlate
     let onRemove: () -> Void
+    @State private var showingPlateDetail = false
+    
+    private var plateMetadata: PlateMetadata {
+        PlateMetadata(
+            state: plate.state,
+            plateTitle: plate.plateTitle,
+            plateImage: plate.plateImage,
+            colorBackground: nil,
+            textColor: nil,
+            visualElements: nil,
+            category: plate.category?.rawValue,
+            rarity: plate.rarity?.rawValue,
+            layoutStyle: nil,
+            confidenceScore: nil,
+            notes: nil,
+            source: plate.source
+        )
+    }
     
     var body: some View {
-        Button(action: onRemove) {
-            VStack(spacing: 8) {
-                // Create temporary PlateMetadata for image loading
+        VStack(spacing: 8) {
+            // Plate image with tap to view and remove button
+            Button(action: { showingPlateDetail = true }) {
                 AsyncPlateImageView(
-                    plate: PlateMetadata(
-                        state: plate.state,
-                        plateTitle: plate.plateTitle,
-                        plateImage: plate.plateImage
-                    ),
+                    plate: plateMetadata,
                     cornerRadius: 6
                 )
                 .aspectRatio(2, contentMode: .fit)
                 .frame(width: 80)
                 .overlay(
-                    // Remove indicator
+                    // Remove button
                     VStack {
                         HStack {
                             Spacer()
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.caption)
-                                .foregroundColor(.red)
-                                .background(Color.white)
-                                .clipShape(Circle())
+                            Button(action: onRemove) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                                    .background(Color.white)
+                                    .clipShape(Circle())
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                         Spacer()
                     }
                     .padding(4)
                 )
-                
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            // Plate title (also tappable)
+            Button(action: { showingPlateDetail = true }) {
                 Text(plate.plateTitle)
                     .font(.caption2)
                     .fontWeight(.medium)
@@ -261,8 +282,11 @@ struct RecentPlateCard: View {
                     .lineLimit(2)
                     .frame(width: 80)
             }
+            .buttonStyle(PlainButtonStyle())
         }
-        .buttonStyle(PlainButtonStyle())
+        .sheet(isPresented: $showingPlateDetail) {
+            PlateDetailView(plate: plateMetadata, game: nil)
+        }
     }
 }
 
