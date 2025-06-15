@@ -97,7 +97,7 @@ struct StateSelectionButton: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 4) {
-                Text(state)
+                Text(USStatePositions.fullName(for: state) ?? state)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(isSelected ? .white : .primary)
@@ -136,7 +136,7 @@ struct StateHeaderView: View {
                 Button(action: onBack) {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
-                        Text(state)
+                        Text(USStatePositions.fullName(for: state) ?? state)
                     }
                     .foregroundColor(.blue)
                 }
@@ -367,7 +367,7 @@ struct PlateDetailCard: View {
                     .font(.headline)
                     .multilineTextAlignment(.center)
                 
-                Text(plate.state)
+                Text(USStatePositions.fullName(for: plate.state) ?? plate.state)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 

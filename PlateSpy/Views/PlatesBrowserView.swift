@@ -381,15 +381,13 @@ struct StatePickerRow: View {
         Button(action: onSelect) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(state)
+                    Text(USStatePositions.fullName(for: state) ?? state)
                         .font(.headline)
                         .foregroundColor(.primary)
                     
-                    if let fullName = USStatePositions.fullName(for: state) {
-                        Text(fullName)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
+                    Text(state)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
                 
                 Spacer()
