@@ -18,9 +18,28 @@ struct GameDetailView: View {
     
     @State private var showingPlateSelector = false
     
+    private var gameName: String {
+        gameManager.displayName(for: game)
+    }
+    
+    private var titleDisplayMode: NavigationBarItem.TitleDisplayMode {
+        // Use inline mode for long titles to prevent truncation
+        return gameName.count > 25 ? .inline : .large
+    }
+    
+    private var shouldShowCustomHeader: Bool {
+        // Show custom header for very long titles that might still truncate in inline mode
+        return gameName.count > 35
+    }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // Custom header for very long game names
+                if shouldShowCustomHeader {
+                    GameNameHeader(gameName: gameName)
+                }
+                
                 // Game overview card
                 GameOverviewCard(game: game)
                 
@@ -40,8 +59,8 @@ struct GameDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(gameManager.displayName(for: game))
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle(shouldShowCustomHeader ? "Game Details" : gameName)
+        .navigationBarTitleDisplayMode(titleDisplayMode)
         .sheet(isPresented: $showingPlateSelector) {
             StreamlinedPlateLoggingView(game: game)
         }
@@ -345,6 +364,28 @@ struct GameActionsSection: View {
     }
 }
 
+/**
+ * Custom header for displaying very long game names
+ */
+struct GameNameHeader: View {
+    let gameName: String
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            Text(gameName)
+                .font(.title2)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true) // Allow text to wrap
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal)
+            
+            Divider()
+        }
+        .padding(.top, 8)
+        .background(Color(.systemGroupedBackground))
+    }
+}
 
 #Preview {
     NavigationStack {
