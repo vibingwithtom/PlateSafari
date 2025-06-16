@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		319C312D2E00B4C700A19D5A /* FeatureShapes in Frameworks */ = {isa = PBXBuildFile; productRef = 319C312C2E00B4C700A19D5A /* FeatureShapes */; };
 		31C1DFA22DFD125D0017EFE7 /* SourcePlateImages in Resources */ = {isa = PBXBuildFile; fileRef = 31C1DFA12DFD125D0017EFE7 /* SourcePlateImages */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				319C312D2E00B4C700A19D5A /* FeatureShapes in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +120,7 @@
 			);
 			name = PlateSpy;
 			packageProductDependencies = (
+				319C312C2E00B4C700A19D5A /* FeatureShapes */,
 			);
 			productName = PlateSpy;
 			productReference = 31DA114D2DFCC90000E4536D /* PlateSpy.app */;
@@ -201,6 +204,9 @@
 			);
 			mainGroup = 31DA11442DFCC90000E4536D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				319C312B2E00B4C700A19D5A /* XCRemoteSwiftPackageReference "FeatureShapes" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 31DA114E2DFCC90000E4536D /* Products */;
 			projectDirPath = "";
@@ -567,6 +573,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		319C312B2E00B4C700A19D5A /* XCRemoteSwiftPackageReference "FeatureShapes" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mpiannucci/FeatureShapes.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		319C312C2E00B4C700A19D5A /* FeatureShapes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 319C312B2E00B4C700A19D5A /* XCRemoteSwiftPackageReference "FeatureShapes" */;
+			productName = FeatureShapes;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 31DA11452DFCC90000E4536D /* Project object */;
 }

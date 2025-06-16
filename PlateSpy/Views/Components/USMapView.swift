@@ -15,13 +15,15 @@ struct USMapView: View {
     let game: Game
     let compactMode: Bool
     let showHeader: Bool
+    let useStateShapes: Bool
     @State private var selectedState: String?
     @State private var showingFullMap = false
     
-    init(game: Game, compactMode: Bool = true, showHeader: Bool = true) {
+    init(game: Game, compactMode: Bool = true, showHeader: Bool = true, useStateShapes: Bool = true) {
         self.game = game
         self.compactMode = compactMode
         self.showHeader = showHeader
+        self.useStateShapes = useStateShapes
     }
     
     var body: some View {
@@ -43,29 +45,34 @@ struct USMapView: View {
                 }
             }
             
-            // Simplified US map using positioned state elements
-            GeometryReader { geometry in
-                ForEach(USStatePositions.allStates, id: \.abbreviation) { stateData in
-                    StateMapElement(
-                        state: stateData,
-                        progress: game.stateProgress[stateData.abbreviation] ?? 0,
-                        gameMode: game.mode,
-                        isSelected: selectedState == stateData.abbreviation,
-                        size: compactMode ? .compact : .standard
-                    )
-                    .position(
-                        x: geometry.size.width * stateData.x,
-                        y: geometry.size.height * stateData.y
-                    )
-                    .onTapGesture {
-                        selectedState = selectedState == stateData.abbreviation ? nil : stateData.abbreviation
+            // Map visualization - either state shapes or positioned circles
+            if useStateShapes {
+                StateShapeMapView(game: game, compactMode: true, showHeader: false, selectedState: $selectedState)
+            } else {
+                // Simplified US map using positioned state elements
+                GeometryReader { geometry in
+                    ForEach(USStatePositions.allStates, id: \.abbreviation) { stateData in
+                        StateMapElement(
+                            state: stateData,
+                            progress: game.stateProgress[stateData.abbreviation] ?? 0,
+                            gameMode: game.mode,
+                            isSelected: selectedState == stateData.abbreviation,
+                            size: compactMode ? .compact : .standard
+                        )
+                        .position(
+                            x: geometry.size.width * stateData.x,
+                            y: geometry.size.height * stateData.y
+                        )
+                        .onTapGesture {
+                            selectedState = selectedState == stateData.abbreviation ? nil : stateData.abbreviation
+                        }
                     }
                 }
+                .aspectRatio(2.4, contentMode: .fit)
+                .frame(maxHeight: compactMode ? 150 : 300)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
             }
-            .aspectRatio(2.4, contentMode: .fit)
-            .frame(maxHeight: compactMode ? 150 : 300)
-            .background(Color(.systemGray6))
-            .cornerRadius(8)
             
             if !compactMode {
                 MapLegend(gameMode: game.mode)
@@ -231,7 +238,13 @@ struct StateProgressTable: View {
     }
     
     private var sortedStates: [(key: String, value: Int)] {
-        game.stateProgress.sorted { $0.value > $1.value }
+        game.stateProgress.sorted { lhs, rhs in
+            if lhs.value == rhs.value {
+                // Secondary sort by state name for stable ordering
+                return lhs.key < rhs.key
+            }
+            return lhs.value > rhs.value
+        }
     }
 }
 
