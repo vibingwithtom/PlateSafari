@@ -33,7 +33,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Data Management")
                 } footer: {
-                    Text("License plate data contains \(plateDataService.plates.count) plates from all US states.")
+                    Text("License plate data contains \(plateDataService.plates.count) plates from all US states. Data sourced from Jon Keegan's US License Plates Database.")
                 }
                 
                 // Game preferences section
@@ -48,6 +48,24 @@ struct SettingsView: View {
                     StatisticsView()
                 } header: {
                     Text("Statistics")
+                }
+                
+                // Development section (temporary)
+                Section {
+                    NavigationLink("🧪 Test State Shapes") {
+                        StateShapeTest()
+                    }
+                    .foregroundColor(.orange)
+                    
+                    NavigationLink("🗺️ Test Shape Map") {
+                        StateShapeMapView(game: Game(mode: .stateCollection, name: "Test"), compactMode: false)
+                            .environmentObject(GameManagerService())
+                    }
+                    .foregroundColor(.orange)
+                } header: {
+                    Text("Development")
+                } footer: {
+                    Text("Experimental features for testing")
                 }
                 
                 // About section
@@ -275,6 +293,32 @@ struct AboutView: View {
                         FeatureRow(icon: "chart.bar", title: "Progress Tracking", description: "Visual maps and statistics for your collections")
                         FeatureRow(icon: "magnifyingglass", title: "Smart Search", description: "Find plates by category, rarity, and more")
                         FeatureRow(icon: "icloud", title: "Offline Ready", description: "Works without internet connection")
+                    }
+                    
+                    // Data attribution
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Data Sources")
+                            .font(.headline)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("License plate data sourced from:")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Link("US License Plates Database", destination: URL(string: "https://github.com/jonkeegan/us-license-plates")!)
+                                    .font(.subheadline)
+                                    .foregroundColor(.blue)
+                                
+                                Text("By Jon Keegan - Beautiful Public Data")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                
+                                Text("8,331 license plates from all US states as of July 2023")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
                     }
                     
                     Spacer(minLength: 20)
