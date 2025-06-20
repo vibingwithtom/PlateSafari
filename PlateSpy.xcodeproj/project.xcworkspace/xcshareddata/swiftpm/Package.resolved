@@ -1,0 +1,33 @@
+{
+  "originHash" : "d5095f1373e9e31d7ef564ecd1d71cd4862be4385a945b67043f416ff759c2c0",
+  "pins" : [
+    {
+      "identity" : "anycodable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/flight-school/AnyCodable.git",
+      "state" : {
+        "revision" : "862808b2070cd908cb04f9aafe7de83d35f81b05",
+        "version" : "0.6.7"
+      }
+    },
+    {
+      "identity" : "featureshapes",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mpiannucci/FeatureShapes.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "62fb8d7e02a153c60a0e1da53411e099485d16cb"
+      }
+    },
+    {
+      "identity" : "geojson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kiliankoe/GeoJSON",
+      "state" : {
+        "revision" : "ad151210f505181e9e8112b81aefc5f54383f4c2",
+        "version" : "0.6.2"
+      }
+    }
+  ],
+  "version" : 3
+}

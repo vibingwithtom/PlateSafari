@@ -22,7 +22,8 @@ struct StreamlinedPlateLoggingView: View {
     @State private var searchText = ""
     @State private var selectedCategory: PlateCategory?
     @State private var showingFilters = false
-    @State private var showingSuccess = false
+    @State private var showingSuccessToast = false
+    @State private var loggedPlateTitle = ""
     @State private var showingError = false
     @State private var errorMessage = ""
     @State private var isLoading = false
@@ -78,10 +79,14 @@ struct StreamlinedPlateLoggingView: View {
             }
             .overlay(
                 Group {
-                    if showingSuccess {
-                        SuccessOverlay {
-                            dismiss()
+                    if showingSuccessToast {
+                        VStack {
+                            Spacer()
+                            SuccessToast(plateTitle: loggedPlateTitle)
+                                .padding(.horizontal)
+                                .padding(.bottom, 100)
                         }
+                        .allowsHitTesting(false)
                     }
                 }
             )
@@ -125,10 +130,13 @@ struct StreamlinedPlateLoggingView: View {
             isLoading = false
             
             if success {
-                showingSuccess = true
-                // Auto-dismiss after 1.5 seconds
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    if showingSuccess {
+                loggedPlateTitle = plate.plateTitle
+                showingSuccessToast = true
+                
+                // Auto-dismiss toast after 2 seconds, then close view
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    showingSuccessToast = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         dismiss()
                     }
                 }

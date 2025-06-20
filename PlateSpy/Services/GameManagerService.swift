@@ -257,6 +257,16 @@ class GameManagerService: ObservableObject {
         games.sort { $0.lastPlayedDate > $1.lastPlayedDate }
     }
     
+    // MARK: - User Preferences Management
+    
+    /**
+     * Update the default game mode preference
+     */
+    func updateDefaultGameMode(_ mode: GameMode) {
+        userPreferences.defaultGameMode = mode
+        savePreferences()
+    }
+    
     // MARK: - Utility Methods
     
     /**

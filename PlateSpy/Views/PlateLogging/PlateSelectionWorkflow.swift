@@ -20,7 +20,8 @@ struct PlateSelectionWorkflow: View {
     @State private var currentStep: WorkflowStep = .stateSelection
     @State private var selectedState: String?
     @State private var selectedPlate: PlateMetadata?
-    @State private var showingSuccess = false
+    @State private var showingSuccessToast = false
+    @State private var loggedPlateTitle = ""
     @State private var showingError = false
     @State private var errorMessage = ""
     
@@ -66,12 +67,15 @@ struct PlateSelectionWorkflow: View {
                 }
             }
             .overlay(
-                // Success overlay
                 Group {
-                    if showingSuccess {
-                        SuccessOverlay {
-                            dismiss()
+                    if showingSuccessToast {
+                        VStack {
+                            Spacer()
+                            SuccessToast(plateTitle: loggedPlateTitle)
+                                .padding(.horizontal)
+                                .padding(.bottom, 100)
                         }
+                        .allowsHitTesting(false)
                     }
                 }
             )
@@ -114,10 +118,13 @@ struct PlateSelectionWorkflow: View {
         let success = gameManager.collectPlate(gameId: game.id, metadata: plate)
         
         if success {
-            showingSuccess = true
-            // Auto-dismiss after 2 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                if showingSuccess {
+            loggedPlateTitle = plate.plateTitle
+            showingSuccessToast = true
+            
+            // Auto-dismiss toast after 2 seconds, then close view
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                showingSuccessToast = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     dismiss()
                 }
             }

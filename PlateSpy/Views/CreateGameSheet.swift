@@ -89,6 +89,10 @@ struct CreateGameSheet: View {
                 Text(errorMessage)
             }
         }
+        .onAppear {
+            // Set default game mode from user preferences
+            selectedMode = gameManager.userPreferences.defaultGameMode
+        }
     }
     
     /**

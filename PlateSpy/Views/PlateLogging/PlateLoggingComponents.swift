@@ -540,35 +540,42 @@ struct EmptyPlateSelectionView: View {
 }
 
 /**
- * Success overlay for successful plate logging
+ * Success toast notification for successful plate logging
  */
-struct SuccessOverlay: View {
-    let onDismiss: () -> Void
+struct SuccessToast: View {
+    let plateTitle: String
+    @State private var isVisible = false
     
     var body: some View {
-        VStack(spacing: 16) {
+        HStack(spacing: 12) {
             Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 60))
+                .font(.title3)
                 .foregroundColor(.green)
             
-            VStack(spacing: 4) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("Plate Logged!")
-                    .font(.title2)
+                    .font(.subheadline)
                     .fontWeight(.semibold)
                 
-                Text("Added to your collection")
-                    .font(.subheadline)
+                Text(plateTitle)
+                    .font(.caption)
                     .foregroundColor(.secondary)
+                    .lineLimit(1)
             }
+            
+            Spacer()
         }
-        .padding(40)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(Color(.systemBackground))
-        .cornerRadius(20)
-        .shadow(radius: 10)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.opacity(0.3))
-        .onTapGesture {
-            onDismiss()
+        .cornerRadius(12)
+        .shadow(radius: 8)
+        .scaleEffect(isVisible ? 1.0 : 0.8)
+        .opacity(isVisible ? 1.0 : 0.0)
+        .onAppear {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                isVisible = true
+            }
         }
     }
 }

@@ -110,9 +110,9 @@ PlateSpy is a SwiftUI iOS app for collecting license plate images in a gamified 
 - Update relevant GitHub issues with progress and resolution status
 - Push branches regularly to maintain backup and collaboration
 - **Issue Management**: 
-- **ALWAYS document progress**: When completing GitHub issues, you MUST add a detailed completion summary comment to the issue using `gh issue comment` before the user closes it
-- **Required documentation includes**: Key improvements, technical implementation details, code changes, bug fixes, user experience results, testing notes, and any backward compatibility considerations
-- **Use structured format**: Include summary, changes made, technical details, and testing notes sections for clarity
+- **ALWAYS document progress**: When completing GitHub issues, you MUST add a concise completion summary comment to the issue using `gh issue comment` before the user closes it
+- **Keep documentation concise**: Include key improvements, user experience results, and testing status. Avoid exhaustive technical details or code snippets unless specifically requested
+- **Use structured format**: Include summary, main changes, and testing notes. Focus on outcomes rather than implementation details
 - **Let user close issues**: Update issue status with progress comments, but let user review and close issues themselves
 
 **Code Documentation**:
