@@ -35,9 +35,22 @@
 		31DA11692DFCC90200E4536D /* PlateSafariUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlateSafariUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3162975E2E05FAA90086EBDC /* Exceptions for "PlateSafari" folder in "PlateSafari" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 31DA114C2DFCC90000E4536D /* PlateSafari */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		31DA114F2DFCC90000E4536D /* PlateSafari */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3162975E2E05FAA90086EBDC /* Exceptions for "PlateSafari" folder in "PlateSafari" target */,
+			);
 			path = PlateSafari;
 			sourceTree = "<group>";
 		};
@@ -413,7 +426,9 @@
 				DEVELOPMENT_TEAM = G7W7SLU42F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PlateSafari/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Plate Safari";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.family-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -442,7 +457,9 @@
 				DEVELOPMENT_TEAM = G7W7SLU42F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PlateSafari/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Plate Safari";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.family-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
