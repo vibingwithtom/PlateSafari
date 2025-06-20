@@ -1,6 +1,6 @@
 //
-//  PlateSpyApp.swift
-//  PlateSpy
+//  PlateSafariApp.swift
+//  PlateSafari
 //
 //  Created by Thomas Raia on 6/13/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct PlateSpyApp: App {
+struct PlateSafariApp: App {
     // Core services for the entire app
     @StateObject private var plateDataService = PlateDataService()
     @StateObject private var gameManager = GameManagerService()

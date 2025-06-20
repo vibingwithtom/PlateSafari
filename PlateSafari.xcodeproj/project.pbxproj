@@ -30,25 +30,25 @@
 
 /* Begin PBXFileReference section */
 		31C1DFA12DFD125D0017EFE7 /* SourcePlateImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SourcePlateImages; sourceTree = "<group>"; };
-		31DA114D2DFCC90000E4536D /* PlateSpy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlateSpy.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		31DA115F2DFCC90200E4536D /* PlateSpyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlateSpyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		31DA11692DFCC90200E4536D /* PlateSpyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlateSpyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		31DA114D2DFCC90000E4536D /* PlateSafari.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlateSafari.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		31DA115F2DFCC90200E4536D /* PlateSafariTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlateSafariTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		31DA11692DFCC90200E4536D /* PlateSafariUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlateSafariUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		31DA114F2DFCC90000E4536D /* PlateSpy */ = {
+		31DA114F2DFCC90000E4536D /* PlateSafari */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PlateSpy;
+			path = PlateSafari;
 			sourceTree = "<group>";
 		};
-		31DA11622DFCC90200E4536D /* PlateSpyTests */ = {
+		31DA11622DFCC90200E4536D /* PlateSafariTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PlateSpyTests;
+			path = PlateSafariTests;
 			sourceTree = "<group>";
 		};
-		31DA116C2DFCC90200E4536D /* PlateSpyUITests */ = {
+		31DA116C2DFCC90200E4536D /* PlateSafariUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PlateSpyUITests;
+			path = PlateSafariUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -83,9 +83,9 @@
 			isa = PBXGroup;
 			children = (
 				31C1DFA12DFD125D0017EFE7 /* SourcePlateImages */,
-				31DA114F2DFCC90000E4536D /* PlateSpy */,
-				31DA11622DFCC90200E4536D /* PlateSpyTests */,
-				31DA116C2DFCC90200E4536D /* PlateSpyUITests */,
+				31DA114F2DFCC90000E4536D /* PlateSafari */,
+				31DA11622DFCC90200E4536D /* PlateSafariTests */,
+				31DA116C2DFCC90200E4536D /* PlateSafariUITests */,
 				31DA114E2DFCC90000E4536D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -93,9 +93,9 @@
 		31DA114E2DFCC90000E4536D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				31DA114D2DFCC90000E4536D /* PlateSpy.app */,
-				31DA115F2DFCC90200E4536D /* PlateSpyTests.xctest */,
-				31DA11692DFCC90200E4536D /* PlateSpyUITests.xctest */,
+				31DA114D2DFCC90000E4536D /* PlateSafari.app */,
+				31DA115F2DFCC90200E4536D /* PlateSafariTests.xctest */,
+				31DA11692DFCC90200E4536D /* PlateSafariUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,9 +103,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		31DA114C2DFCC90000E4536D /* PlateSpy */ = {
+		31DA114C2DFCC90000E4536D /* PlateSafari */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 31DA11732DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSpy" */;
+			buildConfigurationList = 31DA11732DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSafari" */;
 			buildPhases = (
 				31DA11492DFCC90000E4536D /* Sources */,
 				31DA114A2DFCC90000E4536D /* Frameworks */,
@@ -116,19 +116,19 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				31DA114F2DFCC90000E4536D /* PlateSpy */,
+				31DA114F2DFCC90000E4536D /* PlateSafari */,
 			);
-			name = PlateSpy;
+			name = PlateSafari;
 			packageProductDependencies = (
 				319C312C2E00B4C700A19D5A /* FeatureShapes */,
 			);
 			productName = PlateSpy;
-			productReference = 31DA114D2DFCC90000E4536D /* PlateSpy.app */;
+			productReference = 31DA114D2DFCC90000E4536D /* PlateSafari.app */;
 			productType = "com.apple.product-type.application";
 		};
-		31DA115E2DFCC90200E4536D /* PlateSpyTests */ = {
+		31DA115E2DFCC90200E4536D /* PlateSafariTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 31DA11762DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSpyTests" */;
+			buildConfigurationList = 31DA11762DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSafariTests" */;
 			buildPhases = (
 				31DA115B2DFCC90200E4536D /* Sources */,
 				31DA115C2DFCC90200E4536D /* Frameworks */,
@@ -140,18 +140,18 @@
 				31DA11612DFCC90200E4536D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				31DA11622DFCC90200E4536D /* PlateSpyTests */,
+				31DA11622DFCC90200E4536D /* PlateSafariTests */,
 			);
-			name = PlateSpyTests;
+			name = PlateSafariTests;
 			packageProductDependencies = (
 			);
 			productName = PlateSpyTests;
-			productReference = 31DA115F2DFCC90200E4536D /* PlateSpyTests.xctest */;
+			productReference = 31DA115F2DFCC90200E4536D /* PlateSafariTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		31DA11682DFCC90200E4536D /* PlateSpyUITests */ = {
+		31DA11682DFCC90200E4536D /* PlateSafariUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 31DA11792DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSpyUITests" */;
+			buildConfigurationList = 31DA11792DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSafariUITests" */;
 			buildPhases = (
 				31DA11652DFCC90200E4536D /* Sources */,
 				31DA11662DFCC90200E4536D /* Frameworks */,
@@ -163,13 +163,13 @@
 				31DA116B2DFCC90200E4536D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				31DA116C2DFCC90200E4536D /* PlateSpyUITests */,
+				31DA116C2DFCC90200E4536D /* PlateSafariUITests */,
 			);
-			name = PlateSpyUITests;
+			name = PlateSafariUITests;
 			packageProductDependencies = (
 			);
 			productName = PlateSpyUITests;
-			productReference = 31DA11692DFCC90200E4536D /* PlateSpyUITests.xctest */;
+			productReference = 31DA11692DFCC90200E4536D /* PlateSafariUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -195,7 +195,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 31DA11482DFCC90000E4536D /* Build configuration list for PBXProject "PlateSpy" */;
+			buildConfigurationList = 31DA11482DFCC90000E4536D /* Build configuration list for PBXProject "PlateSafari" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -212,9 +212,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				31DA114C2DFCC90000E4536D /* PlateSpy */,
-				31DA115E2DFCC90200E4536D /* PlateSpyTests */,
-				31DA11682DFCC90200E4536D /* PlateSpyUITests */,
+				31DA114C2DFCC90000E4536D /* PlateSafari */,
+				31DA115E2DFCC90200E4536D /* PlateSafariTests */,
+				31DA11682DFCC90200E4536D /* PlateSafariUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -271,12 +271,12 @@
 /* Begin PBXTargetDependency section */
 		31DA11612DFCC90200E4536D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 31DA114C2DFCC90000E4536D /* PlateSpy */;
+			target = 31DA114C2DFCC90000E4536D /* PlateSafari */;
 			targetProxy = 31DA11602DFCC90200E4536D /* PBXContainerItemProxy */;
 		};
 		31DA116B2DFCC90200E4536D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 31DA114C2DFCC90000E4536D /* PlateSpy */;
+			target = 31DA114C2DFCC90000E4536D /* PlateSafari */;
 			targetProxy = 31DA116A2DFCC90200E4536D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -413,7 +413,7 @@
 				DEVELOPMENT_TEAM = G7W7SLU42F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Plate Spy";
+				INFOPLIST_KEY_CFBundleDisplayName = "Plate Safari";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.family-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -424,7 +424,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.raia.PlateSpy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stopthewhales.PlateSafari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -442,7 +442,7 @@
 				DEVELOPMENT_TEAM = G7W7SLU42F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Plate Spy";
+				INFOPLIST_KEY_CFBundleDisplayName = "Plate Safari";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.family-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -453,7 +453,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.raia.PlateSpy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stopthewhales.PlateSafari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -476,7 +476,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlateSpy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlateSpy";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlateSafari.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlateSafari";
 			};
 			name = Debug;
 		};
@@ -495,7 +495,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlateSpy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlateSpy";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlateSafari.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlateSafari";
 			};
 			name = Release;
 		};
@@ -536,7 +536,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		31DA11482DFCC90000E4536D /* Build configuration list for PBXProject "PlateSpy" */ = {
+		31DA11482DFCC90000E4536D /* Build configuration list for PBXProject "PlateSafari" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				31DA11712DFCC90200E4536D /* Debug */,
@@ -545,7 +545,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		31DA11732DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSpy" */ = {
+		31DA11732DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSafari" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				31DA11742DFCC90200E4536D /* Debug */,
@@ -554,7 +554,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		31DA11762DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSpyTests" */ = {
+		31DA11762DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSafariTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				31DA11772DFCC90200E4536D /* Debug */,
@@ -563,7 +563,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		31DA11792DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSpyUITests" */ = {
+		31DA11792DFCC90200E4536D /* Build configuration list for PBXNativeTarget "PlateSafariUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				31DA117A2DFCC90200E4536D /* Debug */,

@@ -1,6 +1,6 @@
 //
 //  Persistence.swift
-//  PlateSpy
+//  PlateSafari
 //
 //  Created by Thomas Raia on 6/13/25.
 //
@@ -32,7 +32,7 @@ struct PersistenceController {
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "PlateSpy")
+        container = NSPersistentContainer(name: "PlateSafari")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }

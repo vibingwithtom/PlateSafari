@@ -1,6 +1,6 @@
 //
 //  MainTabView.swift
-//  PlateSpy
+//  PlateSafari
 //
 //  Created by Thomas Raia on 6/13/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
- * Main navigation structure for the PlateSpy app
+ * Main navigation structure for the Plate Safari app
  * Provides access to all major app features through tab-based navigation
  */
 struct MainTabView: View {

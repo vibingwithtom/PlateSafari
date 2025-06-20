@@ -3,7 +3,10 @@
     "allow": [
       "Bash(find:*)",
       "Bash(rg:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git checkout:*)",
+      "Bash(mv:*)",
+      "Bash(xcodebuild:*)"
     ],
     "deny": []
   }

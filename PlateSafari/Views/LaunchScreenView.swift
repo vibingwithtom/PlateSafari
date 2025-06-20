@@ -1,6 +1,6 @@
 //
 //  LaunchScreenView.swift
-//  PlateSpy
+//  PlateSafari
 //
 //  Created by Claude Code on 6/17/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
- * Custom launch screen for PlateSpy
+ * Custom launch screen for Plate Safari
  * Provides branded loading experience with app icon and name
  */
 struct LaunchScreenView: View {
@@ -52,7 +52,7 @@ struct LaunchScreenView: View {
                     // App title with fade-in animation
                     if showTitle {
                         VStack(spacing: 8) {
-                            Text("PlateSpy")
+                            Text("Plate Safari")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary)

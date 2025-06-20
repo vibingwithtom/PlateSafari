@@ -7,21 +7,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Building and Testing
 ```bash
 # Build for iOS simulator (use available simulator)
-xcodebuild -scheme PlateSpy -destination 'platform=iOS Simulator,name=iPhone 16' build
+xcodebuild -scheme PlateSafari -destination 'platform=iOS Simulator,name=iPhone 16' build
 
 # Clean build (when having asset bundle issues)
-xcodebuild -scheme PlateSpy -destination 'platform=iOS Simulator,name=iPhone 16' clean build
+xcodebuild -scheme PlateSafari -destination 'platform=iOS Simulator,name=iPhone 16' clean build
 
 # Run in iOS simulator (open Xcode and run manually)
-open PlateSpy.xcodeproj
+open PlateSafari.xcodeproj
 
 # Note: Available simulators can be found with:
-# xcodebuild -scheme PlateSpy -showdestinations
+# xcodebuild -scheme PlateSafari -showdestinations
 ```
 
 ## Architecture Overview
 
-PlateSpy is a SwiftUI iOS app for collecting license plate images in a gamified experience. The app manages a database of ~8,291 license plates with ~7,880 images from all US states, supporting two collection modes.
+Plate Safari is a SwiftUI iOS app for collecting license plate images in a gamified experience. The app manages a database of ~8,291 license plates with ~7,880 images from all US states, supporting two collection modes.
 
 ### Core Architecture
 
@@ -29,7 +29,7 @@ PlateSpy is a SwiftUI iOS app for collecting license plate images in a gamified 
 - `PlateDataService`: Manages CSV-based plate metadata with enhanced classifications
 - `GameManagerService`: Handles multiple simultaneous games (max 5) with UserDefaults persistence
 
-**Data Flow**: App → Services → Views via `@EnvironmentObject` injection from `PlateSpyApp.swift`
+**Data Flow**: App → Services → Views via `@EnvironmentObject` injection from `PlateSafariApp.swift`
 
 ### Key Models
 
@@ -258,7 +258,7 @@ LazyVGrid(columns: ResponsiveLayout.responsiveColumns(
 **Build Verification**:
 ```bash
 # Always run clean build after UI changes
-xcodebuild -scheme PlateSpy -destination 'platform=iOS Simulator,name=iPhone 16' clean build
+xcodebuild -scheme PlateSafari -destination 'platform=iOS Simulator,name=iPhone 16' clean build
 ```
 
 **Manual Testing Checklist**:

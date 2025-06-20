@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  PlateSpy
+//  PlateSafari
 //
 //  Created by Thomas Raia on 6/13/25.
 //
@@ -70,7 +70,7 @@ struct SettingsView: View {
                 
                 // About section
                 Section {
-                    Button("About PlateSpy") {
+                    Button("About Plate Safari") {
                         showingAbout = true
                     }
                     
@@ -83,7 +83,7 @@ struct SettingsView: View {
                 } header: {
                     Text("About")
                 } footer: {
-                    Text("PlateSpy v1.0 - License Plate Collection Game")
+                    Text("Plate Safari v1.0 - License Plate Collection Game")
                 }
             }
             .navigationTitle("Settings")
@@ -246,7 +246,7 @@ struct AboutView: View {
                             .foregroundColor(.blue)
                         
                         VStack(spacing: 4) {
-                            Text("PlateSpy")
+                            Text("Plate Safari")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             
@@ -262,10 +262,10 @@ struct AboutView: View {
                     
                     // Description
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("About PlateSpy")
+                        Text("About Plate Safari")
                             .font(.headline)
                         
-                        Text("PlateSpy is the ultimate license plate spotting game! Collect plates from all 50 states and DC with two exciting game modes:")
+                        Text("Plate Safari is the ultimate license plate spotting game! Collect plates from all 50 states and DC with two exciting game modes:")
                             .font(.body)
                         
                         VStack(alignment: .leading, spacing: 8) {

@@ -1,13 +1,13 @@
 //
-//  PlateSpyUITestsLaunchTests.swift
-//  PlateSpyUITests
+//  PlateSafariUITestsLaunchTests.swift
+//  PlateSafariUITests
 //
 //  Created by Thomas Raia on 6/13/25.
 //
 
 import XCTest
 
-final class PlateSpyUITestsLaunchTests: XCTestCase {
+final class PlateSafariUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
